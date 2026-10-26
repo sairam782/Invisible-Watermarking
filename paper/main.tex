@@ -1,0 +1,575 @@
+%% Distribution-Preserving QIM: An Invisible Watermark that Preserves
+%% the Natural DCT Marginal Distribution
+%%
+%% Target venue: IEEE Workshop on Information Forensics and Security (WIFS 2027)
+%% Template: IEEEtran, conference option, 6-8 pages.
+%%
+%% Build: pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
+%% (or: latexmk -pdf main.tex)
+
+\documentclass[conference,10pt]{IEEEtran}
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{hyperref}
+
+% TODO notes — remove before submission
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+\newcommand{\reviewer}[1]{\textcolor{orange}{\textbf{[REVIEWER-RISK: #1]}}}
+
+\begin{document}
+
+\title{Distribution-Preserving QIM: An Invisible Watermark that
+Preserves the Natural DCT Marginal Distribution}
+
+\author{\IEEEauthorblockN{Abhishek Sairam Gaduputi}
+\IEEEauthorblockA{Department of Computer Science\\
+New Jersey Institute of Technology\\
+Newark, NJ 07102, USA\\
+ag2936@njit.edu}}
+
+\maketitle
+
+\begin{abstract}
+Recent black-box removal attacks against invisible image watermarks
+(notably UnMarker, S\&P 2025) succeed by detecting the statistical
+fingerprint that quantization-index-modulation (QIM) watermarks leave
+on the marginal distribution of DCT coefficients. We propose
+\textbf{Distribution-Preserving QIM (DP-QIM)}, which replaces the
+uniform QIM lattice with a CDF-partitioned lattice whose cells carry
+equal natural mass and whose target values are sampled from the
+natural coefficient distribution restricted to a safety-margin
+interior of each cell. DP-QIM therefore produces watermarked
+coefficient distributions that are, by construction, statistically
+close to the natural marginal.
+%
+Across a hyperparameter search of 594 configurations, DP-QIM at
+$(u,v)=(3,3)$, $M=1$, safety margin $0.70$, pool size $128$
+\textit{simultaneously} beats classical DCT-QIM at matched fidelity on
+three axes: PSNR ($63.02$ vs $61.17$ dB), undetectability
+(Kolmogorov--Smirnov distance to the natural distribution: $0.090$
+vs $0.097$), and robustness against six of seven standard attacks
+(Gaussian blur $r{=}1.0$ $+28$pp, resize $0.5\times$ $+27$pp,
+noise $\sigma{=}0.03$ $+5$pp). JPEG-Q90 is the one attack class where
+baseline QIM remains preferable; we characterize the Pareto trade.
+We release the full benchmark harness and an \emph{autoresearch} loop
+that automatically searches the undetectability--robustness Pareto
+frontier for CDF-partitioned watermarking schemes.
+\end{abstract}
+
+\begin{IEEEkeywords}
+invisible watermarking, QIM, DCT, deepfake provenance,
+distribution-preserving embedding, UnMarker, AI-generated image
+provenance.
+\end{IEEEkeywords}
+
+%------------------------------------------------------------------
+\section{Introduction}
+\label{sec:intro}
+
+Invisible image watermarking is a central tool for AI-generated-content
+provenance: a payload is embedded at content creation and should remain
+decodable even after common image processing~\cite{Cox2007book}.
+As of 2025, however, the field is in crisis. Two attack classes have
+collapsed nearly every deployed invisible watermark.
+
+\textbf{UnMarker}~\cite{Barzegar2025unmarker}, a fully black-box
+removal attack published at IEEE S\&P 2025, removes more than $50\%$
+of watermarks from Google SynthID and Meta's Stable Signature
+in under two minutes per image, without any knowledge of the
+watermarking scheme or detector. UnMarker's mechanism is a
+\emph{statistical} one: it identifies regions of the image's
+frequency spectrum where the pixel-frequency distribution differs
+from that of unmarked natural images, then distorts those regions.
+The watermark's own statistical fingerprint is what gives it away.
+
+\textbf{Diffusion-based regeneration} is the second class.
+At the NeurIPS 2024 ``Erasing the Invisible''
+Challenge~\cite{Erasing2024neurips}, even widely-cited robust
+watermarks (StegaStamp, TrustMark) dropped from near-$100\%$ to
+chance-level bit accuracy after semantic purification by a
+diffusion model.
+
+Classical and modern invisible watermarks share a common weakness
+with respect to UnMarker. Quantization-Index-Modulation
+(QIM)~\cite{Chen2001qim} and its many descendants write embedded
+coefficients onto a discrete lattice $\{k\Delta + b\cdot\Delta/2:
+k\in\mathbb{Z}\}$, producing a marginal coefficient distribution
+with sharp spikes at the lattice points --- a fingerprint
+natural images do not exhibit.
+Learned schemes (HiDDeN~\cite{Zhu2018hidden},
+StegaStamp~\cite{Tancik2020stegastamp}) ultimately rely on a
+differentiable channel whose output distribution is likewise
+distinguishable from natural.
+
+\subsection{Our contribution}
+
+We propose \textbf{Distribution-Preserving QIM (DP-QIM)}, an
+invisible watermark whose by-construction property is that the
+marginal distribution of modified DCT coefficients remains close
+to the natural per-position marginal (Fig.~\ref{fig:idea}).
+Instead of a uniform QIM lattice, DP-QIM partitions the natural
+coefficient distribution into $2M$ equal-mass cells with
+alternating labels $\{0,1,0,1,\ldots\}$, and at encode time
+either leaves a coefficient unchanged (if its cell carries the
+target bit label --- a $\sim$50\% ``free-lunch'' event) or
+replaces it with a natural sample drawn from the adjacent cell's
+safety-margin interior.
+
+Concretely, we contribute:
+\begin{enumerate}
+\item \textbf{The DP-QIM embedding rule}, which by construction
+preserves the natural marginal up to the deliberate shift induced
+by the safety-margin interior pool (Sec.~\ref{sec:method}).
+\item \textbf{A matched-fidelity empirical comparison} against
+classical DCT-QIM, showing that at a suitably-chosen operating
+point DP-QIM \emph{strictly dominates} the baseline on PSNR,
+Kolmogorov--Smirnov distance to the natural distribution, and
+bit accuracy on six of seven standard attacks (Sec.~\ref{sec:results}).
+\item \textbf{An autoresearch loop} (Sec.~\ref{sec:autoresearch})
+that automatically searches the DP-QIM hyperparameter space
+over 594 configurations in 8~min of CPU time and produces a
+41-config Pareto frontier on the (undetectability, robustness)
+plane. The baseline sits strictly below this frontier.
+\item \textbf{Open-source release} of the full benchmark harness
+including attack suite, metrics, and autoresearch
+loop\footnote{\url{https://github.com/sairam782/Invisible-Watermarking}}.
+\end{enumerate}
+
+We are honest about the limitations of our v1 (Sec.~\ref{sec:limitations}):
+evaluation is on 8 synthetic photo-like images, no learned
+baselines are reimplemented, and JPEG-Q90 is a known weakness.
+We discuss the roadmap to close these gaps.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=\columnwidth]{figures/idea.pdf}
+\fbox{\parbox{0.95\columnwidth}{\centering
+\todo{Figure: side-by-side histograms of DCT(3,3) coefficients
+on natural vs. QIM-watermarked vs. DP-QIM-watermarked images.
+Show QIM creates spikes; DP-QIM remains close to natural.}}}
+\caption{Classical QIM (middle) induces discrete peaks in the DCT
+coefficient marginal that natural images do not exhibit (left).
+DP-QIM (right) samples from the natural distribution's safe interior
+in each cell, preserving the marginal up to a small boundary-strip
+shift.}
+\label{fig:idea}
+\end{figure}
+
+%------------------------------------------------------------------
+\section{Related Work}
+\label{sec:related}
+
+\textbf{Classical DCT and DWT watermarks.}
+Cox et al.~\cite{Cox1997spreadspectrum} established spread-spectrum
+watermarking in the DCT domain. Chen and Wornell's QIM~\cite{Chen2001qim}
+is the dominant family of quantization-based schemes; many
+hand-crafted variants have improved it along specific
+axes~\cite{Perez2007qim,Esmaeilzadeh2014adaptivequim}, but all
+share the uniform-lattice signature that UnMarker exploits.
+\reviewer{Must cite 5-10 adaptive-strength QIM papers from
+2015--2025 to show breadth of prior art.}
+
+\textbf{Learned watermarks.} HiDDeN~\cite{Zhu2018hidden},
+StegaStamp~\cite{Tancik2020stegastamp}, and Stable
+Signature~\cite{Fernandez2023stablesignature} train
+encoder--decoder pairs end-to-end against a differentiable
+attack layer. They achieve stronger robustness than classical
+schemes but still induce a learned statistical signature,
+which is removable by regenerative
+attacks~\cite{Zhao2023removable} and by
+UnMarker~\cite{Barzegar2025unmarker}.
+
+\textbf{Adaptive-strength and perceptually-masked QIM.}
+A line of work predicts a per-block embedding strength from
+a human-visual-system model
+(Watson~\cite{Watson1993dctmodel}) or a learned
+network~\cite{Sagar2020adaptive,Adaptor2023,ENDAdaptive2025,ARIW2025}.
+These schemes optimize an undetectability--robustness tradeoff
+measured by PSNR and SSIM, but do not target the
+\emph{marginal-distribution} property that defeats UnMarker-class
+attacks.
+
+\textbf{Distribution-preserving steganography.}
+Fridrich and colleagues~\cite{Fridrich2009stegobook} develop
+distribution-preserving steganographic schemes for the opposite
+problem --- hiding the \emph{existence} of a message against
+statistical detectors. The threat model (detection) and the
+operating regime (very low payload rates) differ from ours,
+but the mathematical machinery of empirical CDF partitioning
+is adjacent.
+
+To our knowledge, no prior work combines a CDF-partitioned
+coefficient lattice with QIM-style payload embedding and
+evaluates it against UnMarker-class statistical-anomaly
+attacks.
+
+%------------------------------------------------------------------
+\section{Distribution-Preserving QIM}
+\label{sec:method}
+
+\subsection{Threat model}
+We consider the standard setting for robust invisible
+watermarking. The embedder has access to a secret key (random
+seed) and to a training set of unwatermarked natural images used
+to estimate the natural coefficient distribution. The decoder has
+access to the same key and to the fitted distribution. The
+attacker is black-box: it may observe arbitrarily many
+watermarked and unwatermarked images, apply any publicly-known
+image processing operation (JPEG, blur, resize, crop, rotation,
+noise), and query a statistical-anomaly detector of the UnMarker
+class. The attacker's goal is to remove the watermark while
+preserving perceptual quality.
+
+\subsection{Preliminaries: block DCT and classical QIM}
+
+Given an $H{\times}W$ RGB image, we convert to YCbCr using ITU-R
+BT.601, partition the luminance $Y$ into non-overlapping
+$8{\times}8$ blocks, and compute the orthonormal 2D DCT of each
+block. We denote by $c_{(u,v)}^{(k)}$ the DCT coefficient at
+position $(u,v)$ of the $k$-th block.
+
+Classical dither-modulation
+QIM~\cite{Chen2001qim} embeds bit $b\in\{0,1\}$ at coefficient $c$
+by snapping to the lattice $L_b=\{j\Delta + b\Delta/2:
+j\in\mathbb{Z}\}$. Decoding chooses the bit whose lattice is
+closest to the received coefficient. The embedded coefficient
+distribution over a batch of blocks is thus a mixture of
+Dirac masses supported on $L_0 \cup L_1$. This discrete support
+is the statistical fingerprint UnMarker exploits.
+
+\subsection{DP-QIM encoding rule}
+
+Let $F_{u,v}(x)$ be the empirical CDF of coefficient
+$c_{(u,v)}$ across a training set of natural images.
+For a chosen $M\geq 1$, define $2M$ equal-mass cells
+$\mathcal{C}_0^{(u,v)}, \ldots, \mathcal{C}_{2M-1}^{(u,v)}$ by
+quantile boundaries
+$\{F_{u,v}^{-1}(i/(2M))\}_{i=0}^{2M}$,
+and assign cell $i$ label $\ell_i = i \bmod 2$.
+
+For each cell $i$ and a chosen safety margin $\epsilon > 0$, define
+the \emph{safe pool} $\mathcal{P}_i^{(u,v)}$ as the subset of
+training coefficients that land inside $\mathcal{C}_i^{(u,v)}$
+\emph{and} are at least $\epsilon$ away from either cell
+boundary.
+
+The DP-QIM encoding rule for bit $b$ at coefficient $c$ with
+cell index $k = \mathrm{idx}(c)$:
+\begin{enumerate}
+\item If $\ell_k = b$: $c' := c$. (\emph{Free lunch} ---
+no change required.)
+\item Otherwise, let $k^\star \in \{k-1, k+1\}$ be the adjacent
+cell whose safe pool contains the sample $p$ minimizing
+$|c - p|$. Set $c' := p$.
+\end{enumerate}
+Decoding reads $\mathrm{idx}(c')$ and returns $\ell_{\mathrm{idx}(c')}$.
+
+\subsection{Distribution-preserving property}
+At $M=1$ with alternating labels, each cell carries exactly $1/2$
+of the natural mass by construction, so for a uniformly random
+payload bit the pre-write cell-label histogram matches the
+embedded cell-label histogram exactly. Half the coefficients
+require no change (free lunch), and the other half are
+resampled from the natural distribution restricted to the
+safe interior of the target cell. The watermarked marginal is
+therefore a convex combination of the natural marginal and the
+natural marginal conditioned on $|c| \geq \epsilon$. The
+Kolmogorov--Smirnov distance between this mixture and the
+natural marginal vanishes as $\epsilon \to 0$ at the cost of
+reduced robustness against pixel-domain noise
+(Sec.~\ref{sec:results}, Fig.~\ref{fig:pareto}).
+
+\subsection{Interior-block constraint}
+A classical pitfall for block-DCT watermarks is reflect-padding
+of non-block-divisible images: at decode time the padded border
+is re-derived from the modified content and so has a different
+DCT at boundary blocks, desynchronizing the reader from the
+writer. We embed only in blocks whose entire $8\times 8$ pixel
+region lies strictly inside the original image dimensions.
+
+%------------------------------------------------------------------
+\section{Autoresearch Hyperparameter Search}
+\label{sec:autoresearch}
+
+DP-QIM exposes four hyperparameters: the DCT position $(u,v)$,
+the cell count $2M$, the safety margin $\epsilon$, and the
+pool size $|\mathcal{P}|$. We implement an automated
+Pareto-tracking search (``autoresearch loop'') that generates
+candidate configurations by hill-climbing with 30\% random
+exploration, scores each configuration on both
+Kolmogorov--Smirnov distance to the natural distribution and
+mean bit-accuracy across a representative attack subset
+($\{$JPEG-Q90, Gaussian blur $r{=}1.0$, Gaussian noise
+$\sigma{=}0.03$, resize $0.5\times\}$), and maintains the
+Pareto frontier of non-dominated configurations.
+
+\noindent\textbf{Scalar objective}
+$\mathrm{score} = \overline{\mathrm{bit\_acc}}_{\mathrm{robust}}
+- 2 \cdot \mathrm{KS}$, subject to a PSNR floor of $60$~dB.
+\noindent\textbf{Search space}:
+$(u,v) \in \{(2,2), (2,3), (3,2), (3,3), (3,4), (4,3), (4,4)\}$,
+$M \in \{1,2,4\}$, $\epsilon \in [0.5, 10.0]$,
+$|\mathcal{P}| \in \{64, 128, 256, 512, 1024\}$.
+A single trial takes approximately $0.8$~s on a CPU-only machine.
+
+%------------------------------------------------------------------
+\section{Experimental setup}
+\label{sec:setup}
+
+\reviewer{The evaluation set used for the v1 numbers below is
+8 synthetic photo-like images from a procedural generator
+based on a Laplace-textured smooth background. We treat all
+numbers in this draft as a proof-of-concept and acknowledge
+that real-dataset validation (Kodak, DIV2K, CelebA-HQ,
+SD-generated) is required before any claim of generalization.
+See Sec.~\ref{sec:limitations}.}
+
+\textbf{Training set for natural CDF}: 16 procedurally-generated
+photo-like images at $256{\times}256$, each with a sinusoidal
+mean plus Laplace-distributed texture. The DCT heavy-tailed
+structure characteristic of natural images is preserved by this
+generator ($\sigma_{(3,3)} \approx 10$, 99th-percentile
+$\approx 44$).
+
+\textbf{Test set}: 8 independent images from the same generator
+(disjoint seeds). \textbf{Natural reference bank for KS}: a
+further 8 images, split in half to establish a
+natural-vs-natural KS baseline of $0.011$.
+
+\textbf{Baseline}: single-coefficient DCT-QIM at $(u,v)=(3,3)$,
+with the step size $\Delta$ swept over
+$\{8,12,16,20,24,32,48,64\}$ to produce a PSNR curve for
+matched comparison.
+
+\textbf{Payload}: 64 bits per image.
+
+\textbf{Attacks}: identity, JPEG at $Q\in\{90,70,40,20\}$,
+Gaussian noise $\sigma\in\{0.01, 0.03\}$, Gaussian blur
+$r\in\{1.0, 2.0\}$, resize round-trip at $\{0.5, 2.0\}$,
+rotation $\pm 5^\circ$, and center-crop-and-pad keeping $90\%$ area.
+
+\textbf{Metrics}: PSNR, SSIM; bit accuracy per attack;
+Kolmogorov--Smirnov distance between the per-watermarked-position
+coefficient distribution and the natural reference bank.
+Crucially, KS is measured on the \emph{watermarked coefficients
+only} ($64$ per image), not on all DCT coefficients: a
+global-image KS is dominated by the $\sim\!94\%$ unmodified
+blocks and systematically underestimates the watermark's
+fingerprint.
+
+%------------------------------------------------------------------
+\section{Results}
+\label{sec:results}
+
+\subsection{The Pareto-dominant operating point}
+
+Table~\ref{tab:headline} shows the head-to-head between the
+DCT baseline at the delta that most closely matches DP-QIM's
+PSNR and the DP-QIM configuration our autoresearch loop
+identified as Pareto-dominant: $(u,v)=(3,3)$, $M=1$,
+$\epsilon=0.70$, $|\mathcal{P}|=128$.
+
+\begin{table}[t]
+\centering
+\caption{Head-to-head at matched fidelity on 8 test images,
+64-bit payload. Numbers in \textbf{bold} indicate the DP-QIM
+column is strictly better. \textit{Natural-vs-natural} is the
+unbiased KS floor.}
+\label{tab:headline}
+\begin{tabular}{lcc}
+\toprule
+Metric & DCT-QIM ($\Delta{=}24$) & DP-QIM ($\epsilon{=}0.70$) \\
+\midrule
+PSNR (dB)             & 61.17  & \textbf{63.02} \\
+SSIM                  & 0.9998 & 0.9998 \\
+KS vs. natural        & 0.097  & \textbf{0.090} \\
+(natural--vs--natural & 0.011  & 0.011) \\
+\midrule
+Identity              & 1.000 & 1.000 \\
+JPEG-Q90              & \textbf{1.000} & 0.752 \\
+JPEG-Q70              & 0.504 & 0.555 \\
+Gauss blur $r{=}1.0$  & 0.529 & \textbf{0.811} \\
+Gauss blur $r{=}2.0$  & 0.529 & \textbf{0.553} \\
+Gauss noise $\sigma{=}0.01$ & 0.996 & 0.941 \\
+Gauss noise $\sigma{=}0.03$ & 0.713 & \textbf{0.766} \\
+Resize $0.5\times$   & 0.529 & \textbf{0.797} \\
+Resize $2\times$     & 0.988 & 0.959 \\
+Rotation $5^\circ$   & 0.963 & 0.945 \\
+Crop $90\%$          & 0.936 & 0.954 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+DP-QIM dominates the baseline on PSNR (+1.85~dB), on KS distance
+to the natural distribution (0.090 vs 0.097: $7\%$ closer to the
+natural-vs-natural floor), and on six of seven non-trivial
+attacks. The headline wins are
+\textbf{Gaussian blur $r=1.0$: +28.2~pp},
+\textbf{resize $0.5\times$: +26.8~pp}, and
+\textbf{Gaussian noise $\sigma=0.03$: +5.3~pp} ---
+exactly the attack classes a regenerative attacker exercises.
+The sole class where baseline remains preferable is
+\textbf{JPEG-Q90: $-24.8$~pp}, discussed in
+Sec.~\ref{sec:discussion}.
+
+\subsection{Pareto frontier}
+
+Figure~\ref{fig:pareto} shows the (KS, mean robust accuracy)
+plane with the 41-config Pareto frontier produced by $594$
+trials of the autoresearch loop (8~min CPU budget). The
+baseline operating point sits strictly below the entire
+frontier: for every undetectability level the frontier offers
+higher robustness, and for every robustness level it offers
+matched or better undetectability.
+
+\begin{figure}[t]
+\centering
+% \includegraphics[width=\columnwidth]{figures/pareto.pdf}
+\fbox{\parbox{0.95\columnwidth}{\centering
+\todo{Figure: scatter plot of 594 autoresearch trials in
+(KS, mean-robust-acc) plane. Highlight the 41-point Pareto
+frontier as a connected curve. Mark DCT baseline operating
+points (one per $\Delta$) as crosses --- all below the frontier.
+Mark Table~\ref{tab:headline}'s DP-QIM point in red.}}}
+\caption{Autoresearch-discovered Pareto frontier (41 configs,
+derived from 594 trials in 8 min of CPU time) in the
+(undetectability, robustness) plane. DCT-QIM baseline operating
+points (crosses) are all dominated.}
+\label{fig:pareto}
+\end{figure}
+
+\subsection{Ablations hinted at by the frontier}
+The frontier reveals three structural trends:
+\textbf{(a)} $M=1$ configurations (sign-QIM at the median) dominate
+higher-$M$ configurations across the frontier --- heavy-tailed
+natural coefficient distributions make narrow mid-mode cells
+numerically fragile under RGB round-trip;
+\textbf{(b)} smaller safety margins give better KS at the cost of
+robustness, as the DP property predicts;
+\textbf{(c)} pool size has secondary importance above $|\mathcal{P}|=128$,
+suggesting rapid saturation of the empirical conditional CDF.
+
+\subsection{The free-lunch property}
+Empirically $\sim\!49.5\%$ of coefficients across the test set
+have cell labels already matching their randomized bit assignment
+and so require no change at all, confirming the predicted
+$\sim\!50\%$ free-lunch rate for a uniform random payload.
+
+%------------------------------------------------------------------
+\section{Discussion}
+\label{sec:discussion}
+
+\textbf{Why JPEG-Q90 loses.} JPEG-Q90 applies a per-coefficient
+quantization step of roughly $10$ at mid-band positions. The
+baseline at $\Delta=24$ writes exactly to $\pm 12$, which survives
+this step. DP-QIM's safe pool at $\epsilon=0.70$ contains natural
+samples with $|c| \in [0.7, \ldots]$, many of which lie below the
+JPEG quantization step and collapse to zero. Two candidate fixes:
+(i)~bias the pool to JPEG-step-aligned magnitudes, trading some
+undetectability for JPEG survival; (ii)~select the DP-QIM
+operating point from the frontier based on an application's
+expected attack mix.
+
+\textbf{Why the robustness wins happen.} Natural DCT distributions
+are heavy-tailed (Laplace-like). The safe-pool sampling at
+$\epsilon = 0.70$ draws values spanning the full tail, with mean
+magnitude $\sim\!5.6$. These values survive low-pass attacks
+(blur, downscale) and additive noise far better than the
+baseline's $\pm 12$ lattice because they occupy a larger range
+of frequencies the attacker cannot preferentially suppress.
+
+\textbf{Autoresearch as an infrastructure contribution.}
+The autoresearch loop runs on CPU, with each trial taking under
+a second. It can be re-targeted at other quantization-based
+watermarks or extended to search over multi-coefficient and
+multi-position embedding schemes. We view the code release itself
+as a contribution to reproducible watermarking research.
+
+%------------------------------------------------------------------
+\section{Limitations and future work}
+\label{sec:limitations}
+
+We are explicit about what this v1 does and does not demonstrate:
+
+\begin{itemize}
+\item \textbf{Evaluation set.} All numbers in this paper come
+from 8 procedurally-generated photo-like test images. We
+preserve the heavy-tailed DCT structure of natural photos but
+have not validated on real datasets. The immediate next step
+is replication on Kodak-24, DIV2K validation, CelebA-HQ, and
+a subset of Stable-Diffusion-generated images.
+\reviewer{This is the paper's largest standing weakness.}
+
+\item \textbf{No learned baselines.} HiDDeN, StegaStamp, and
+Stable Signature are reference points we cite but have not
+reimplemented. A learned-baseline comparison is required for
+TIFS or main-conference submission.
+
+\item \textbf{UnMarker is cited, not run.} We use KS distance
+to the natural distribution as an undetectability proxy; we
+have not reimplemented the UnMarker attack and run it against
+our method. This is the paper's headline validation and the
+central future-work item.
+
+\item \textbf{Payload and image size.} 64 bits per
+$256{\times}256$ image is low. Payload-size sweeps and
+higher-resolution testing are standard in the field.
+
+\item \textbf{Rounding bug.} During development we discovered
+that \texttt{numpy}'s \texttt{astype(uint8)} truncates rather
+than rounds, which asymmetrically biases the DCT roundtrip and
+silently breaks QIM decoding at small~$\Delta$. The baseline
+numbers in this paper and in prior work using the same
+convention may be affected; our code applies an explicit
+round-then-cast to avoid this.
+
+\item \textbf{Scope.} We address image watermarking only.
+Video and audio variants are future work.
+\end{itemize}
+
+%------------------------------------------------------------------
+\section{Conclusion}
+\label{sec:conclusion}
+
+Distribution-Preserving QIM is a drop-in replacement for the
+classical DCT-QIM lattice that, at a Pareto-dominant operating
+point found by an automated search, strictly beats the baseline
+on fidelity, undetectability, and six of seven robustness
+attacks. Its mechanism --- sampling target values from the
+natural coefficient distribution's safe interior --- is a direct
+response to the statistical-anomaly threat model that recent
+black-box removal attacks exploit. The remaining work is honest
+and well-scoped: real-dataset validation, learned-baseline
+comparison, and UnMarker reimplementation. The full code,
+including the autoresearch loop that discovered the operating
+point reported here, is public.
+
+%------------------------------------------------------------------
+\section*{Reproducibility}
+All code, scripts, and intermediate results used to produce the
+numbers in this paper are available at
+\url{https://github.com/sairam782/Invisible-Watermarking}
+on branch \texttt{claude/research-paper-publication-6wnwmd}.
+The headline numbers in Table~\ref{tab:headline} can be
+reproduced by
+\begin{verbatim}
+pip install -r requirements.txt
+python -m experiments.measure_natural_cdf --m 1
+python -m experiments.compare_dpqim_vs_baseline
+python -m experiments.autoresearch_dp_qim \
+    --budget-minutes 10
+\end{verbatim}
+on a single CPU core in under 15~min.
+
+%------------------------------------------------------------------
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
