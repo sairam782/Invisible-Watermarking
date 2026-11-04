@@ -81,6 +81,17 @@ def _photo(seed: int, h: int = 256, w: int = 256) -> np.ndarray:
     return np.clip(rgb, 0, 255).astype(np.uint8)
 
 
+def _cap_size(img: np.ndarray, max_side: int) -> np.ndarray:
+    """Center-crop to at most max_side x max_side, then block-align."""
+    h, w = img.shape[:2]
+    if h > max_side or w > max_side:
+        y0 = max(0, (h - max_side) // 2)
+        x0 = max(0, (w - max_side) // 2)
+        img = img[y0:y0 + max_side, x0:x0 + max_side]
+    h, w = img.shape[:2]
+    return img[: (h // BLOCK) * BLOCK, : (w // BLOCK) * BLOCK]
+
+
 def _extract_watermarked_coeffs(img, uv, payload_bits, seed):
     y = rgb_to_ycbcr(img)[..., 0]
     y_pad, _ = pad_to_multiple(y, BLOCK)
@@ -267,19 +278,46 @@ def main():
     ap.add_argument("--max-trials", type=int, default=200)
     ap.add_argument("--seed", type=int, default=42)
     ap.add_argument("--resume", action="store_true")
+    ap.add_argument("--train-dataset", default="synth_16",
+                    help="dataset for CDF fitting (default: 16 synthetic photos)")
+    ap.add_argument("--test-dataset", default=None,
+                    help="dataset for test (default: 8 synthetic held-out)")
+    ap.add_argument("--max-test-size", type=int, default=256,
+                    help="crop real images to this max square size for speed")
     ap.add_argument("--state", type=Path,
                     default=RESULTS / "dpqim_autoresearch_leaderboard.json")
     args = ap.parse_args()
     RESULTS.mkdir(parents=True, exist_ok=True)
 
     print("preparing training coefficients + test photos + natural reference...")
-    train_imgs = [_photo(i) for i in range(16)]
+    # Training set
+    if args.train_dataset.startswith("synth_"):
+        n = int(args.train_dataset.split("_", 1)[1])
+        train_imgs = [_photo(i) for i in range(n)]
+    else:
+        from src.datasets import load_dataset as load_ds
+        train_imgs = [img for _, img in load_ds(args.train_dataset)]
+        if not train_imgs:
+            raise SystemExit(f"empty train dataset: {args.train_dataset}")
+    train_imgs = [_cap_size(img, args.max_test_size) for img in train_imgs]
     train_coeffs = collect_dct_coeffs(train_imgs)
-    test_imgs = [(f"test_{i:02d}", _photo(1000 + i)) for i in range(8)]
-    natural_ref_imgs = [_photo(2000 + i) for i in range(8)]
-    natural_bank_all = collect_dct_coeffs(natural_ref_imgs)
+    print(f"train: {len(train_imgs)} images, {train_coeffs.shape[0]} blocks")
+
+    # Test set
+    if args.test_dataset is None or args.test_dataset.startswith("synth_"):
+        n = 8 if args.test_dataset is None else int(args.test_dataset.split("_", 1)[1])
+        test_imgs = [(f"test_{i:02d}", _photo(1000 + i)) for i in range(n)]
+    else:
+        from src.datasets import load_dataset as load_ds
+        test_imgs = [(name, _cap_size(img, args.max_test_size))
+                      for name, img in load_ds(args.test_dataset)]
+        if not test_imgs:
+            raise SystemExit(f"empty test dataset: {args.test_dataset}")
+    print(f"test:  {len(test_imgs)} images")
+
+    # Natural reference bank per uv — large, drawn from the training set itself.
     natural_bank_per_uv = {
-        uv: natural_bank_all[..., uv[0], uv[1]].flatten() for uv in UV_CANDIDATES
+        uv: train_coeffs[..., uv[0], uv[1]].flatten() for uv in UV_CANDIDATES
     }
     suite = AttackSuite.default()
 

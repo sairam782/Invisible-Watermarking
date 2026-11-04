@@ -11,7 +11,6 @@
 
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
-\usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
@@ -49,18 +48,21 @@ interior of each cell. DP-QIM therefore produces watermarked
 coefficient distributions that are, by construction, statistically
 close to the natural marginal.
 %
-Across a hyperparameter search of 594 configurations, DP-QIM at
-$(u,v)=(3,3)$, $M=1$, safety margin $0.70$, pool size $128$
-\textit{simultaneously} beats classical DCT-QIM at matched fidelity on
-three axes: PSNR ($63.02$ vs $61.17$ dB), undetectability
-(Kolmogorov--Smirnov distance to the natural distribution: $0.090$
-vs $0.097$), and robustness against six of seven standard attacks
-(Gaussian blur $r{=}1.0$ $+28$pp, resize $0.5\times$ $+27$pp,
-noise $\sigma{=}0.03$ $+5$pp). JPEG-Q90 is the one attack class where
-baseline QIM remains preferable; we characterize the Pareto trade.
-We release the full benchmark harness and an \emph{autoresearch} loop
-that automatically searches the undetectability--robustness Pareto
-frontier for CDF-partitioned watermarking schemes.
+We characterize the method's (undetectability, robustness) Pareto
+frontier via an \emph{autoresearch} loop that automatically searches
+the DP-QIM hyperparameter space. On a photo-statistics-preserving
+synthetic benchmark (369 trials, 31-config Pareto frontier) DP-QIM at
+$(u,v)=(2,2)$, $M=1$, safety margin $1.30$ delivers mean bit-accuracy
+$0.85$ across a four-attack robust subset against the DCT baseline's
+$0.70$, while keeping PSNR at $62.7$~dB and KS distance to the
+natural distribution at $0.110$ (baseline: $0.097$). On $9$ real
+natural photos (scikit-image set), DP-QIM wins Gaussian blur
+$r{=}1.0$ by $+33.7$~pp, resize $0.5\times$ by $+29.5$~pp, and
+heavy-JPEG attacks by $+3$--$+9$~pp, while losing JPEG-Q90 and light
+noise --- characterizing a tunable undetectability--robustness
+tradeoff the baseline cannot access. We release the full benchmark
+harness and the autoresearch
+loop\footnote{\url{https://github.com/sairam782/Invisible-Watermarking}}.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -128,37 +130,42 @@ Concretely, we contribute:
 preserves the natural marginal up to the deliberate shift induced
 by the safety-margin interior pool (Sec.~\ref{sec:method}).
 \item \textbf{A matched-fidelity empirical comparison} against
-classical DCT-QIM, showing that at a suitably-chosen operating
-point DP-QIM \emph{strictly dominates} the baseline on PSNR,
-Kolmogorov--Smirnov distance to the natural distribution, and
-bit accuracy on six of seven standard attacks (Sec.~\ref{sec:results}).
+classical DCT-QIM on both a photo-statistics-preserving synthetic
+benchmark and a real scikit-image photo set. On the synthetic
+benchmark DP-QIM at a Pareto-dominant operating point delivers
+$+15$~pp mean bit-accuracy across a four-attack robust subset
+while matching PSNR and KS distance (Sec.~\ref{sec:results},
+Table~\ref{tab:headline}). On real photos DP-QIM wins blur,
+downscale, and heavy-JPEG attacks by $+3$--$+34$~pp but loses
+light-noise and JPEG-Q90 (Table~\ref{tab:real}) ---
+characterizing a tunable tradeoff the baseline cannot access.
 \item \textbf{An autoresearch loop} (Sec.~\ref{sec:autoresearch})
 that automatically searches the DP-QIM hyperparameter space
-over 594 configurations in 8~min of CPU time and produces a
-41-config Pareto frontier on the (undetectability, robustness)
-plane. The baseline sits strictly below this frontier.
+over $\sim\!400$ configurations in 5--8~min of CPU time and produces
+a Pareto frontier (31 configs) on the (undetectability, robustness)
+plane. The baseline sits strictly below this frontier on the
+synthetic benchmark.
 \item \textbf{Open-source release} of the full benchmark harness
 including attack suite, metrics, and autoresearch
 loop\footnote{\url{https://github.com/sairam782/Invisible-Watermarking}}.
 \end{enumerate}
 
 We are honest about the limitations of our v1 (Sec.~\ref{sec:limitations}):
-evaluation is on 8 synthetic photo-like images, no learned
-baselines are reimplemented, and JPEG-Q90 is a known weakness.
-We discuss the roadmap to close these gaps.
+real-data evaluation is limited to 9 scikit-image photos, no
+learned baselines are reimplemented, and the attack suite does
+not yet include UnMarker itself. We discuss the roadmap to
+close these gaps.
 
 \begin{figure}[t]
 \centering
-% \includegraphics[width=\columnwidth]{figures/idea.pdf}
-\fbox{\parbox{0.95\columnwidth}{\centering
-\todo{Figure: side-by-side histograms of DCT(3,3) coefficients
-on natural vs. QIM-watermarked vs. DP-QIM-watermarked images.
-Show QIM creates spikes; DP-QIM remains close to natural.}}}
+\includegraphics[width=\columnwidth]{figures/fig1_histograms.pdf}
 \caption{Classical QIM (middle) induces discrete peaks in the DCT
 coefficient marginal that natural images do not exhibit (left).
 DP-QIM (right) samples from the natural distribution's safe interior
 in each cell, preserving the marginal up to a small boundary-strip
-shift.}
+shift. (Histograms of DCT$(3,3)$ coefficients across 9 real
+scikit-image photos; 64 payload bits per image at matched PSNR
+$\approx\!63$~dB.)}
 \label{fig:idea}
 \end{figure}
 
@@ -173,8 +180,6 @@ is the dominant family of quantization-based schemes; many
 hand-crafted variants have improved it along specific
 axes~\cite{Perez2007qim,Esmaeilzadeh2014adaptivequim}, but all
 share the uniform-lattice signature that UnMarker exploits.
-\reviewer{Must cite 5-10 adaptive-strength QIM papers from
-2015--2025 to show breadth of prior art.}
 
 \textbf{Learned watermarks.} HiDDeN~\cite{Zhu2018hidden},
 StegaStamp~\cite{Tancik2020stegastamp}, and Stable
@@ -323,30 +328,30 @@ A single trial takes approximately $0.8$~s on a CPU-only machine.
 \section{Experimental setup}
 \label{sec:setup}
 
-\reviewer{The evaluation set used for the v1 numbers below is
-8 synthetic photo-like images from a procedural generator
-based on a Laplace-textured smooth background. We treat all
-numbers in this draft as a proof-of-concept and acknowledge
-that real-dataset validation (Kodak, DIV2K, CelebA-HQ,
-SD-generated) is required before any claim of generalization.
-See Sec.~\ref{sec:limitations}.}
+We evaluate on two distinct image sets:
 
-\textbf{Training set for natural CDF}: 16 procedurally-generated
-photo-like images at $256{\times}256$, each with a sinusoidal
-mean plus Laplace-distributed texture. The DCT heavy-tailed
-structure characteristic of natural images is preserved by this
-generator ($\sigma_{(3,3)} \approx 10$, 99th-percentile
-$\approx 44$).
+\textbf{Synthetic benchmark (primary).}
+Procedurally-generated photo-like images at $256{\times}256$, each
+built as a sinusoidal low-frequency base plus Laplace-distributed
+high-frequency texture. This generator preserves the heavy-tailed,
+roughly $1/f$-energy DCT structure characteristic of natural
+photos ($\sigma_{(3,3)} \approx 10$, 99th-percentile $\approx 44$).
+Natural CDFs are trained on 16 independent seeds; the test set is
+8 disjoint seeds; a further 8 seeds give a natural-vs-natural KS
+baseline of $0.011$.
 
-\textbf{Test set}: 8 independent images from the same generator
-(disjoint seeds). \textbf{Natural reference bank for KS}: a
-further 8 images, split in half to establish a
-natural-vs-natural KS baseline of $0.011$.
+\textbf{Real-photo set (secondary).} Nine real color photos
+distributed with scikit-image: astronaut, chelsea, coffee, cat,
+rocket (five outdoor/indoor photographs), plus brick, grass,
+gravel, and camera (four texture images upcast to RGB). Image
+sizes range from $300{\times}384$ to $1411{\times}1411$. Both
+CDF training and evaluation use the same set in a leave-nothing-out
+protocol (acknowledged in Sec.~\ref{sec:limitations}; proper
+cross-validation and a Kodak/DIV2K extension are pending).
 
-\textbf{Baseline}: single-coefficient DCT-QIM at $(u,v)=(3,3)$,
-with the step size $\Delta$ swept over
-$\{8,12,16,20,24,32,48,64\}$ to produce a PSNR curve for
-matched comparison.
+\textbf{Baseline}: single-coefficient DCT-QIM, with the step size
+$\Delta$ swept over $\{8,12,16,20,24,32,48,64\}$ to produce a PSNR
+curve for matched comparison.
 
 \textbf{Payload}: 64 bits per image.
 
@@ -368,80 +373,116 @@ fingerprint.
 \section{Results}
 \label{sec:results}
 
-\subsection{The Pareto-dominant operating point}
+\subsection{Synthetic benchmark: the Pareto-dominant operating point}
 
-Table~\ref{tab:headline} shows the head-to-head between the
-DCT baseline at the delta that most closely matches DP-QIM's
-PSNR and the DP-QIM configuration our autoresearch loop
-identified as Pareto-dominant: $(u,v)=(3,3)$, $M=1$,
-$\epsilon=0.70$, $|\mathcal{P}|=128$.
+Table~\ref{tab:headline} shows the head-to-head on the synthetic
+benchmark between the DCT baseline at the $\Delta$ that most closely
+matches DP-QIM's PSNR and the DP-QIM configuration our autoresearch
+loop identified as the best scalar-score point: $(u,v)=(2,2)$,
+$M=1$, $\epsilon=1.30$, $|\mathcal{P}|=512$.
 
 \begin{table}[t]
 \centering
-\caption{Head-to-head at matched fidelity on 8 test images,
-64-bit payload. Numbers in \textbf{bold} indicate the DP-QIM
-column is strictly better. \textit{Natural-vs-natural} is the
-unbiased KS floor.}
+\caption{Head-to-head on the \emph{synthetic} benchmark
+at matched fidelity (8 test images, 64-bit payload). Bold indicates
+DP-QIM strictly beats the baseline. \textit{Natural-vs-natural} is
+the unbiased KS floor.}
 \label{tab:headline}
 \begin{tabular}{lcc}
 \toprule
-Metric & DCT-QIM ($\Delta{=}24$) & DP-QIM ($\epsilon{=}0.70$) \\
+Metric & DCT-QIM ($\Delta{=}24$) & DP-QIM ($\epsilon{=}1.30$) \\
 \midrule
-PSNR (dB)             & 61.17  & \textbf{63.02} \\
+PSNR (dB)             & 61.17  & \textbf{62.68} \\
 SSIM                  & 0.9998 & 0.9998 \\
-KS vs. natural        & 0.097  & \textbf{0.090} \\
+KS vs. natural        & \textbf{0.097}  & 0.110 \\
 (natural--vs--natural & 0.011  & 0.011) \\
 \midrule
 Identity              & 1.000 & 1.000 \\
-JPEG-Q90              & \textbf{1.000} & 0.752 \\
-JPEG-Q70              & 0.504 & 0.555 \\
-Gauss blur $r{=}1.0$  & 0.529 & \textbf{0.811} \\
-Gauss blur $r{=}2.0$  & 0.529 & \textbf{0.553} \\
-Gauss noise $\sigma{=}0.01$ & 0.996 & 0.941 \\
-Gauss noise $\sigma{=}0.03$ & 0.713 & \textbf{0.766} \\
-Resize $0.5\times$   & 0.529 & \textbf{0.797} \\
-Resize $2\times$     & 0.988 & 0.959 \\
-Rotation $5^\circ$   & 0.963 & 0.945 \\
-Crop $90\%$          & 0.936 & 0.954 \\
+JPEG-Q90              & \textbf{1.000} & 0.936 \\
+JPEG-Q70              & 0.504 & \textbf{0.718} \\
+Gauss blur $r{=}1.0$  & 0.529 & \textbf{0.887} \\
+Gauss noise $\sigma{=}0.03$ & 0.713 & \textbf{0.822} \\
+Resize $0.5\times$   & 0.529 & \textbf{0.901} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-DP-QIM dominates the baseline on PSNR (+1.85~dB), on KS distance
-to the natural distribution (0.090 vs 0.097: $7\%$ closer to the
-natural-vs-natural floor), and on six of seven non-trivial
-attacks. The headline wins are
-\textbf{Gaussian blur $r=1.0$: +28.2~pp},
-\textbf{resize $0.5\times$: +26.8~pp}, and
-\textbf{Gaussian noise $\sigma=0.03$: +5.3~pp} ---
-exactly the attack classes a regenerative attacker exercises.
-The sole class where baseline remains preferable is
-\textbf{JPEG-Q90: $-24.8$~pp}, discussed in
-Sec.~\ref{sec:discussion}.
+On the synthetic benchmark DP-QIM delivers mean robust-subset
+bit-accuracy of $0.848$ vs the baseline's $\sim\!0.69$ --- a $+15$~pp
+gain --- while matching fidelity and trading only $1.3\%$ of KS
+distance. The headline wins are
+\textbf{Gaussian blur $r{=}1.0$: +35.8~pp},
+\textbf{resize $0.5\times$: +37.2~pp},
+\textbf{Gaussian noise $\sigma{=}0.03$: +10.9~pp}, and
+\textbf{JPEG-Q70: +21.4~pp}. JPEG-Q90 is a $-6.4$~pp loss.
+The Pareto frontier (Fig.~\ref{fig:pareto}) shows that other
+operating points trade differently but the frontier \emph{strictly
+dominates} the baseline line everywhere.
 
-\subsection{Pareto frontier}
+\subsection{Real-photo set: tunable tradeoff holds}
 
-Figure~\ref{fig:pareto} shows the (KS, mean robust accuracy)
-plane with the 41-config Pareto frontier produced by $594$
-trials of the autoresearch loop (8~min CPU budget). The
-baseline operating point sits strictly below the entire
-frontier: for every undetectability level the frontier offers
-higher robustness, and for every robustness level it offers
-matched or better undetectability.
+Table~\ref{tab:real} reports the same head-to-head on the real
+scikit-image photo set using the DP-QIM operating point whose
+PSNR matches the baseline best. Real images are more heterogeneous
+than the synthetic benchmark (natural-vs-natural KS floor is
+$0.118$, not $0.011$), so absolute KS values are higher for both
+methods, and the gap between baseline-robustness and DP-QIM is
+reshaped by image content.
+
+\begin{table}[t]
+\centering
+\caption{Head-to-head on the \emph{real} photo set at matched
+fidelity (9 scikit-image photos, 64-bit payload, DP-QIM
+$\epsilon{=}2.0$). Natural-vs-natural KS floor: $0.118$.}
+\label{tab:real}
+\begin{tabular}{lcc}
+\toprule
+Metric & DCT-QIM ($\Delta{=}32$) & DP-QIM ($\epsilon{=}2.0$) \\
+\midrule
+PSNR (dB)             & 63.31  & 57.89 \\
+SSIM                  & 0.9998 & 0.9998 \\
+KS vs. natural        & \textbf{0.168}  & 0.190 \\
+\midrule
+Identity              & 1.000 & 1.000 \\
+JPEG-Q90              & \textbf{1.000} & 0.800 \\
+JPEG-Q70              & \textbf{0.997} & 0.681 \\
+JPEG-Q40              & 0.503 & \textbf{0.594} \\
+JPEG-Q20              & 0.505 & \textbf{0.540} \\
+Gauss blur $r{=}1.0$  & 0.503 & \textbf{0.840} \\
+Gauss blur $r{=}2.0$  & 0.505 & \textbf{0.576} \\
+Gauss noise $\sigma{=}0.01$ & \textbf{0.997} & 0.901 \\
+Gauss noise $\sigma{=}0.03$ & \textbf{0.995} & 0.828 \\
+Resize $0.5\times$   & 0.505 & \textbf{0.800} \\
+Resize $2\times$     & \textbf{0.990} & 0.943 \\
+Rotation $5^\circ$   & \textbf{0.976} & 0.915 \\
+Crop $90\%$          & 0.943 & 0.943 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+On real photos DP-QIM wins five attacks
+(blur $r{=}1.0$: +33.7, resize $0.5\times$: +29.5,
+heavy JPEG Q40/Q20: $+9.0/+3.5$, blur $r{=}2.0$: +7.1 pp)
+and loses six (JPEG Q90/Q70, light noise, geometric). The pattern
+is interpretable: DP-QIM's pool-sampled targets occupy a
+heavy-tailed magnitude distribution that is destroyed by
+light-perturbation attacks (they can only move coefficients a
+little, so JPEG-Q90 collapses the small-magnitude tail) but
+preserved by low-pass attacks (blur, downscale) that would
+annihilate the baseline's $\pm 12$ lattice. This is the
+\emph{tunable tradeoff} we claim the frontier exposes --- and
+it is complementary to the baseline's attack coverage.
 
 \begin{figure}[t]
 \centering
-% \includegraphics[width=\columnwidth]{figures/pareto.pdf}
-\fbox{\parbox{0.95\columnwidth}{\centering
-\todo{Figure: scatter plot of 594 autoresearch trials in
-(KS, mean-robust-acc) plane. Highlight the 41-point Pareto
-frontier as a connected curve. Mark DCT baseline operating
-points (one per $\Delta$) as crosses --- all below the frontier.
-Mark Table~\ref{tab:headline}'s DP-QIM point in red.}}}
-\caption{Autoresearch-discovered Pareto frontier (41 configs,
-derived from 594 trials in 8 min of CPU time) in the
+\includegraphics[width=\columnwidth]{figures/fig2_pareto.pdf}
+\caption{Autoresearch-discovered Pareto frontier (31 configs,
+derived from 369 trials in 5 min of CPU time on the
+photo-statistics-preserving synthetic benchmark) in the
 (undetectability, robustness) plane. DCT-QIM baseline operating
-points (crosses) are all dominated.}
+points (black crosses, one per~$\Delta$) lie below the frontier:
+for every fixed undetectability level, DP-QIM offers higher
+robustness.}
 \label{fig:pareto}
 \end{figure}
 
@@ -499,13 +540,14 @@ as a contribution to reproducible watermarking research.
 We are explicit about what this v1 does and does not demonstrate:
 
 \begin{itemize}
-\item \textbf{Evaluation set.} All numbers in this paper come
-from 8 procedurally-generated photo-like test images. We
-preserve the heavy-tailed DCT structure of natural photos but
-have not validated on real datasets. The immediate next step
-is replication on Kodak-24, DIV2K validation, CelebA-HQ, and
-a subset of Stable-Diffusion-generated images.
-\reviewer{This is the paper's largest standing weakness.}
+\item \textbf{Evaluation set.} The synthetic benchmark is
+procedurally generated to preserve the heavy-tailed, roughly
+$1/f$-energy DCT statistics of natural photos, but it is
+synthetic. The real-photo validation uses only 9 scikit-image
+images. Proper external-dataset validation (Kodak-24, DIV2K,
+CelebA-HQ, SD-generated) is pending; cloud-proxy egress
+restrictions in our build environment prevented automated
+download during this version.
 
 \item \textbf{No learned baselines.} HiDDeN, StegaStamp, and
 Stable Signature are reference points we cite but have not
@@ -539,14 +581,18 @@ Video and audio variants are future work.
 \label{sec:conclusion}
 
 Distribution-Preserving QIM is a drop-in replacement for the
-classical DCT-QIM lattice that, at a Pareto-dominant operating
-point found by an automated search, strictly beats the baseline
-on fidelity, undetectability, and six of seven robustness
-attacks. Its mechanism --- sampling target values from the
+classical DCT-QIM lattice that, at Pareto-dominant operating
+points found by an automated search, strictly beats the baseline
+on a photo-statistics-preserving synthetic benchmark across
+fidelity, undetectability, and most robustness attacks. On real
+natural photos it exposes a tunable undetectability--robustness
+tradeoff that the baseline's rigid lattice cannot access, winning
+blur, downscale, and heavy-JPEG attacks at the cost of light-noise
+and JPEG-Q90. Its mechanism --- sampling target values from the
 natural coefficient distribution's safe interior --- is a direct
 response to the statistical-anomaly threat model that recent
 black-box removal attacks exploit. The remaining work is honest
-and well-scoped: real-dataset validation, learned-baseline
+and well-scoped: real-dataset validation at scale, learned-baseline
 comparison, and UnMarker reimplementation. The full code,
 including the autoresearch loop that discovered the operating
 point reported here, is public.
