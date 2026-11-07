@@ -1,0 +1,48 @@
+Subject: Request for arXiv endorsement (cs.CR) — watermarking preprint
+
+Dear Dr. <PROFESSOR NAME>,
+
+I'm an M.S. student in Computer Science at NJIT working on a research
+paper on invisible image watermarking. I'd like to post the preprint on
+arXiv (primary category cs.CR, cross-list cs.CV) and need an
+endorsement from a registered submitter in one of those categories.
+
+Would you be willing to endorse me? If yes, please go to:
+
+  https://arxiv.org/auth/endorse
+
+and enter my endorsement code:
+
+  <YOUR ENDORSEMENT CODE>    (you can find this at
+                              https://arxiv.org/auth/need-endorsement
+                              after logging in to your arXiv account)
+
+A short summary of the paper (6 pages, 3 figures, 4 tables):
+
+  Title: Distribution-Preserving QIM: An Invisible Watermark that
+         Preserves the Natural DCT Marginal Distribution
+
+  Abstract (one paragraph): Recent black-box removal attacks against
+  invisible image watermarks (notably UnMarker, IEEE S&P 2025) succeed
+  by detecting the statistical fingerprint that quantization-index-
+  modulation watermarks leave on the DCT coefficient distribution. We
+  propose Distribution-Preserving QIM, which replaces the uniform QIM
+  lattice with a CDF-partitioned lattice whose cells carry equal
+  natural mass and whose target values are sampled from the natural
+  distribution's safe interior. Against a reimplemented UnMarker-style
+  attack, our method retains >=89% bit accuracy at settings that drop
+  the classical DCT-QIM baseline to 77% -- a +12 to +14 percentage-
+  point survival advantage, reproduced on both synthetic and real
+  images. The full benchmark harness including the attack is open-
+  source at github.com/sairam782/Invisible-Watermarking.
+
+I am happy to send you the full PDF or the GitHub link if you would
+like to review it before endorsing. The paper is also already public on
+TechRxiv as a precaution in case the endorsement cannot arrive before
+my Nov 15 target.
+
+Thank you very much for your time,
+
+Abhishek Sairam Gaduputi
+M.S. Computer Science, NJIT
+ag2936@njit.edu

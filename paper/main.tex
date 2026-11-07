@@ -14,14 +14,9 @@
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage{textcomp}
-\usepackage{xcolor}
 \usepackage{booktabs}
 \usepackage{url}
 \usepackage{hyperref}
-
-% TODO notes — remove before submission
-\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
-\newcommand{\reviewer}[1]{\textcolor{orange}{\textbf{[REVIEWER-RISK: #1]}}}
 
 \begin{document}
 
@@ -178,7 +173,7 @@ Cox et al.~\cite{Cox1997spreadspectrum} established spread-spectrum
 watermarking in the DCT domain. Chen and Wornell's QIM~\cite{Chen2001qim}
 is the dominant family of quantization-based schemes; many
 hand-crafted variants have improved it along specific
-axes~\cite{Perez2007qim,Esmaeilzadeh2014adaptivequim,Li2005improvedqim,Ourique2005angleqim,Hsu2023fuzzyqim,Mehta2021robustvideo},
+axes~\cite{Perez2007qim,Esmaeilzadeh2014adaptivequim,Li2005improvedqim,Ourique2005angleqim,Hsu2014fuzzyqim,Mehta2021robustvideo},
 but all share the uniform-lattice signature that UnMarker exploits.
 
 \textbf{Learned watermarks.} HiDDeN~\cite{Zhu2018hidden},
@@ -677,15 +672,19 @@ Stable Signature are reference points we cite but have not
 reimplemented. A learned-baseline comparison is required for
 TIFS or main-conference submission.
 
-\item \textbf{UnMarker is cited, not run.} We use KS distance
-to the natural distribution as an undetectability proxy; we
-have not reimplemented the UnMarker attack and run it against
-our method. This is the paper's headline validation and the
-central future-work item.
+\item \textbf{UnMarker is reimplemented in spirit, not from
+upstream code.} Our peak-density attack (Sec.~\ref{sec:method_attack})
+follows the mechanism described in the UnMarker paper and press
+coverage, but we do not have access to the authors' exact code or
+hyperparameters. A direct re-run of the published implementation on
+DP-QIM would strengthen the claim. Similarly, we have not evaluated
+against diffusion-based regeneration attacks (NeurIPS 2024 ``Erasing
+the Invisible'') --- a natural v2 target.
 
 \item \textbf{Payload and image size.} 64 bits per
-$256{\times}256$ image is low. Payload-size sweeps and
-higher-resolution testing are standard in the field.
+$256{\times}256$ image (and $9$ real photos up to $1411{\times}1411$)
+covers the standard watermarking regime, but higher-payload and
+higher-resolution testing is still needed.
 
 \item \textbf{Rounding bug.} During development we discovered
 that \texttt{numpy}'s \texttt{astype(uint8)} truncates rather
@@ -705,20 +704,20 @@ Video and audio variants are future work.
 
 Distribution-Preserving QIM is a drop-in replacement for the
 classical DCT-QIM lattice that, at Pareto-dominant operating
-points found by an automated search, strictly beats the baseline
-on a photo-statistics-preserving synthetic benchmark across
-fidelity, undetectability, and most robustness attacks. On real
-natural photos it exposes a tunable undetectability--robustness
-tradeoff that the baseline's rigid lattice cannot access, winning
-blur, downscale, and heavy-JPEG attacks at the cost of light-noise
-and JPEG-Q90. Its mechanism --- sampling target values from the
-natural coefficient distribution's safe interior --- is a direct
-response to the statistical-anomaly threat model that recent
-black-box removal attacks exploit. The remaining work is honest
-and well-scoped: real-dataset validation at scale, learned-baseline
-comparison, and UnMarker reimplementation. The full code,
-including the autoresearch loop that discovered the operating
-point reported here, is public.
+points found by an automated search, beats the baseline on a
+photo-statistics-preserving synthetic benchmark across fidelity,
+undetectability, and most robustness attacks, and on real natural
+photos exposes a tunable undetectability--robustness tradeoff the
+baseline's rigid lattice cannot access. Against a reimplementation
+of the UnMarker-style peak-density removal attack, DP-QIM retains
+$+8$ to $+14$~percentage points of bit accuracy over the baseline
+across both benchmarks --- a direct validation of the
+distribution-preserving mechanism against the statistical-anomaly
+threat model. The remaining work is well-scoped: scaling the
+real-dataset evaluation to Kodak/DIV2K/CelebA, reimplementing a
+learned (HiDDeN/StegaStamp) baseline, and running the authors'
+upstream UnMarker code. The full code, including the autoresearch
+loop that discovered the operating point reported here, is public.
 
 %------------------------------------------------------------------
 \section*{Reproducibility}
@@ -734,8 +733,10 @@ python -m experiments.measure_natural_cdf --m 1
 python -m experiments.compare_dpqim_vs_baseline
 python -m experiments.autoresearch_dp_qim \
     --budget-minutes 10
+python -m experiments.unmarker_vs_methods
+python -m experiments.payload_sweep
 \end{verbatim}
-on a single CPU core in under 15~min.
+on a single CPU core in under 30~min.
 
 %------------------------------------------------------------------
 \bibliographystyle{IEEEtran}
