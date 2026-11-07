@@ -78,8 +78,9 @@ def fit_natural_cdfs(
     safety_margin: float = 3.0,
     max_pool_size: int = 512,
     rng_seed: int = 0,
+    positions: tuple[tuple[int, int], ...] | None = None,
 ) -> dict[tuple[int, int], NaturalCDF]:
-    """Fit a NaturalCDF with 2M cells for every non-DC position."""
+    """Fit a NaturalCDF with 2M cells for every non-DC position (or only `positions`)."""
     if m < 1:
         raise ValueError("m must be >= 1")
     n_blocks = dct_coeffs.shape[0]
@@ -89,9 +90,12 @@ def fit_natural_cdfs(
     rng = np.random.default_rng(rng_seed)
     out: dict[tuple[int, int], NaturalCDF] = {}
     percentiles = np.linspace(0.0, 100.0, 2 * m + 1)
+    wanted = set(positions) if positions is not None else None
     for u in range(BLOCK):
         for v in range(BLOCK):
             if u == 0 and v == 0:
+                continue
+            if wanted is not None and (u, v) not in wanted:
                 continue
             samples = dct_coeffs[:, u, v]
             interior_edges = np.percentile(samples, percentiles[1:-1])

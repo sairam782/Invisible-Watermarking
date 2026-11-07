@@ -1,0 +1,16 @@
+\begin{tabular}{lccc}
+\toprule
+Attack & DP-QIM & $\Delta$ vs.\ DCT-QIM (pp) & 95\% CI \\
+\midrule
+No attack & 0.999 & -0.1 & [-0.3, +0.0] \\
+JPEG $Q{=}90$ & 0.839 & \textbf{-15.2} & [-19.2, -11.8] \\
+JPEG $Q{=}70$ & 0.710 & \textbf{-28.4} & [-31.4, -25.3] \\
+Gaussian noise $\sigma{=}0.03$ & 0.829 & \textbf{-13.6} & [-16.0, -11.6] \\
+Gaussian blur $r{=}1$ & 0.837 & \textbf{+34.6} & [+30.3, +39.6] \\
+Downscale $0.5\times$ & 0.831 & \textbf{+34.0} & [+30.5, +37.4] \\
+Contrast $\times 0.5$ & 0.967 & \textbf{+19.6} & [+13.5, +30.0] \\
+Contrast $\times 0.8$ & 0.975 & -0.3 & [-2.5, +2.0] \\
+UnMarker-style ($\tau{=}2$, $j{=}0.5$) & 0.972 & \textbf{-2.8} & [-5.2, -1.0] \\
+UnMarker-style ($\tau{=}1.5$, $j{=}1$) & 0.912 & \textbf{-6.9} & [-9.6, -3.9] \\
+\bottomrule
+\end{tabular}

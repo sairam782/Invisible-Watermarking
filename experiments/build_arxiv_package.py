@@ -33,16 +33,21 @@ def build_package(out_dir: Path, include_bbl: bool = True):
     shutil.copy(PAPER_DIR / "main.tex", out_dir / "main.tex")
     shutil.copy(PAPER_DIR / "references.bib", out_dir / "references.bib")
     (out_dir / "figures").mkdir(exist_ok=True)
-    for fig in (PAPER_DIR / "figures").glob("*.pdf"):
-        shutil.copy(fig, out_dir / "figures" / fig.name)
+    # Only the figures main.tex actually includes.
+    import re
+    tex = (PAPER_DIR / "main.tex").read_text()
+    for name in re.findall(r"\\includegraphics(?:\[[^\]]*\])?\{figures/([^}]+)\}", tex):
+        shutil.copy(PAPER_DIR / "figures" / name, out_dir / "figures" / name)
+    # Generated tables pulled in with \input{tables/...}.
+    shutil.copytree(PAPER_DIR / "tables", out_dir / "tables")
     # arXiv is happier with .bbl alongside .bib for reproducibility.
     if include_bbl and (PAPER_DIR / "main.bbl").exists():
         shutil.copy(PAPER_DIR / "main.bbl", out_dir / "main.bbl")
 
     # A short cover note helps the moderators.
     (out_dir / "README.txt").write_text(
-        "Distribution-Preserving QIM: An Invisible Watermark that Preserves\n"
-        "the Natural DCT Marginal Distribution\n"
+        "Distribution-Preserving QIM: Trading Noise Margin for Statistical\n"
+        "Undetectability and Scaling Robustness in Invisible Watermarking\n"
         "\n"
         "Author: Abhishek Sairam Gaduputi (New Jersey Institute of Technology)\n"
         "\n"
