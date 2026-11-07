@@ -275,19 +275,34 @@ $|c - p|$. Set $c' := p$.
 Decoding reads $\mathrm{idx}(c')$ and returns $\ell_{\mathrm{idx}(c')}$.
 
 \subsection{Distribution-preserving property}
-At $M=1$ with alternating labels, each cell carries exactly $1/2$
-of the natural mass by construction, so for a uniformly random
-payload bit the pre-write cell-label histogram matches the
-embedded cell-label histogram exactly. Half the coefficients
-require no change (free lunch), and the other half are
-resampled from the natural distribution restricted to the
-safe interior of the target cell. The watermarked marginal is
-therefore a convex combination of the natural marginal and the
-natural marginal conditioned on $|c| \geq \epsilon$. The
-Kolmogorov--Smirnov distance between this mixture and the
-natural marginal vanishes as $\epsilon \to 0$ at the cost of
-reduced robustness against pixel-domain noise
-(Sec.~\ref{sec:results}, Fig.~\ref{fig:pareto}).
+Let $F$ be the natural marginal CDF at position $(u,v)$,
+$F_\epsilon$ the natural distribution conditioned on
+$|c-c_\mathrm{edge}| \geq \epsilon$ (the safe interior of
+each cell), $P_W$ the watermarked marginal, and $B$ the
+payload-bit distribution (Bernoulli$(1/2)$ by assumption).
+At $M=1$, cells are $\mathcal{C}_0=(-\infty, F^{-1}(1/2)]$ and
+$\mathcal{C}_1=(F^{-1}(1/2), +\infty)$, each carrying mass
+exactly $1/2$. A natural coefficient falls in cell $\ell$ with
+probability $1/2$; with probability $1/2$ the payload bit $b$
+equals $\ell$ (free lunch, $c'=c$, drawn from $F$), and with
+probability $1/2$ the coefficient is replaced by a draw from
+$F_\epsilon$ restricted to the other cell. Therefore
+\[
+P_W \;=\; \tfrac{1}{2}\,F \;+\; \tfrac{1}{2}\,F_\epsilon,
+\]
+and the Kolmogorov--Smirnov distance to natural is bounded by
+\[
+\mathrm{KS}(P_W, F) \;=\; \tfrac{1}{2}\,
+\mathrm{KS}(F_\epsilon, F)
+\;\xrightarrow{\epsilon\to 0}\; 0,
+\]
+since $F_\epsilon \to F$ in total variation as the boundary
+exclusion vanishes. The choice of $\epsilon$ therefore
+directly controls the undetectability floor at the cost of
+reduced perturbation energy, which trades against robustness
+against pixel-domain noise. This analytic bound is consistent
+with the Pareto frontier shape observed empirically in
+Fig.~\ref{fig:pareto}.
 
 \subsection{Interior-block constraint}
 A classical pitfall for block-DCT watermarks is reflect-padding
