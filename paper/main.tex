@@ -178,18 +178,21 @@ Cox et al.~\cite{Cox1997spreadspectrum} established spread-spectrum
 watermarking in the DCT domain. Chen and Wornell's QIM~\cite{Chen2001qim}
 is the dominant family of quantization-based schemes; many
 hand-crafted variants have improved it along specific
-axes~\cite{Perez2007qim,Esmaeilzadeh2014adaptivequim}, but all
-share the uniform-lattice signature that UnMarker exploits.
+axes~\cite{Perez2007qim,Esmaeilzadeh2014adaptivequim,Li2005improvedqim,Ourique2005angleqim,Hsu2023fuzzyqim,Mehta2021robustvideo},
+but all share the uniform-lattice signature that UnMarker exploits.
 
 \textbf{Learned watermarks.} HiDDeN~\cite{Zhu2018hidden},
-StegaStamp~\cite{Tancik2020stegastamp}, and Stable
-Signature~\cite{Fernandez2023stablesignature} train
+StegaStamp~\cite{Tancik2020stegastamp}, Stable
+Signature~\cite{Fernandez2023stablesignature}, and the recent
+InvisMark~\cite{Xu2025invismark} train
 encoder--decoder pairs end-to-end against a differentiable
 attack layer. They achieve stronger robustness than classical
 schemes but still induce a learned statistical signature,
 which is removable by regenerative
 attacks~\cite{Zhao2023removable} and by
-UnMarker~\cite{Barzegar2025unmarker}.
+UnMarker~\cite{Barzegar2025unmarker}. Analogous watermarks for
+language-model outputs~\cite{Kirchenbauer2023llmwatermark} face
+the same marginal-detection concern.
 
 \textbf{Adaptive-strength and perceptually-masked QIM.}
 A line of work predicts a per-block embedding strength from
@@ -548,10 +551,30 @@ DCT-QIM's rigid lattice coincidentally survives slightly better. At
 \emph{effective} attack strengths (jitter $\geq 0.5$ or threshold
 $\leq 2.0$), DP-QIM retains $\geq\!0.89$ bit accuracy while DCT-QIM
 drops to $0.77$--$0.87$, giving DP-QIM a \textbf{+7 to +14~pp survival
-advantage}. This is the paper's headline validation: a direct
-operationalization of the UnMarker threat model confirms that the
+advantage} on the synthetic benchmark. The same experiment on the
+nine real scikit-image photos reproduces the pattern: at
+threshold~2.0 / jitter~1.0 the baseline drops to $0.764$ while
+DP-QIM holds at $0.887$, a \textbf{+12.3~pp} advantage; at
+threshold~1.5 / jitter~1.0, $0.736$ vs $0.823$
+(\textbf{+8.7~pp}). Figure~\ref{fig:unmarker} visualizes both
+benchmarks side by side.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig3_unmarker.pdf}
+\caption{Post-attack bit accuracy under UnMarker-style peak-density
+attack at three strength levels on the synthetic benchmark (left)
+and the real scikit-image photo set (right). DP-QIM maintains
+higher survival at every effective attack strength on both
+benchmarks; the two methods coincide at weak attack strength
+where neither is meaningfully challenged.}
+\label{fig:unmarker}
+\end{figure}
+
+This is the paper's headline validation: a direct operationalization
+of the UnMarker threat model confirms that the
 distribution-preserving property buys real resistance against
-statistical-anomaly removal.
+statistical-anomaly removal, on both synthetic and real images.
 
 \subsection{Payload scaling}
 Across payload sizes $\{32, 64, 128, 256\}$ bits, DP-QIM maintains a

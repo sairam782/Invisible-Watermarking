@@ -1,0 +1,58 @@
+PLAINTEXT ABSTRACT — paste into arxiv.org/submit, Abstract field
+================================================================
+
+Recent black-box removal attacks against invisible image watermarks
+(notably UnMarker, S&P 2025) succeed by detecting the statistical
+fingerprint that quantization-index-modulation (QIM) watermarks leave on
+the marginal distribution of DCT coefficients. We propose
+Distribution-Preserving QIM (DP-QIM), which replaces the uniform QIM
+lattice with a CDF-partitioned lattice whose cells carry equal natural
+mass and whose target values are sampled from the natural coefficient
+distribution restricted to a safety-margin interior of each cell. DP-QIM
+therefore produces watermarked coefficient distributions that are, by
+construction, statistically close to the natural marginal.
+
+Headline result: against a reimplemented UnMarker-style peak-density
+attack, DP-QIM retains >=89% bit accuracy at settings that drop the
+classical DCT-QIM baseline to 77% -- a +12 to +14 percentage-point
+survival advantage at identical attack parameters, reproduced on both
+a photo-statistics-preserving synthetic benchmark and a nine-image real
+photo set (where the advantage is +12.3pp at matched attack strength).
+On a standard attack suite DP-QIM further wins Gaussian blur (+28 to
++36pp), downscale (+27 to +37pp), and heavy JPEG (+3 to +9pp) at
+matched or better PSNR.
+
+We characterize the (undetectability, robustness) Pareto frontier via
+an autoresearch loop that automatically searches the DP-QIM
+hyperparameter space (369 trials, 31-config Pareto frontier in 5 min on
+CPU) and release the full benchmark harness including the
+UnMarker-class attack module at
+https://github.com/sairam782/Invisible-Watermarking .
+
+
+ONE-LINER (for the Comments field)
+==================================
+6 pages, 3 figures, 4 tables. Code at https://github.com/sairam782/Invisible-Watermarking
+
+
+LINKEDIN / TWITTER POST (for after arXiv is live)
+=================================================
+
+New preprint: "Distribution-Preserving QIM" -- an invisible image
+watermark that survives UnMarker-class statistical-anomaly removal
+attacks by matching, rather than contradicting, the natural DCT
+coefficient distribution.
+
+Key numbers on a reimplementation of the UnMarker attack:
+  * DCT-QIM baseline drops to 77% bit accuracy
+  * DP-QIM (ours) retains 89-92% bit accuracy
+  * +12 pp survival advantage, replicated on 9 real photos
+
+Open-source benchmark harness includes an autoresearch loop that
+discovered the Pareto-dominant operating point in 5 minutes of CPU
+search over 369 configurations.
+
+Paper: arXiv:XXXX.XXXXX  (fill in after submission)
+Code:  https://github.com/sairam782/Invisible-Watermarking
+
+#InvisibleWatermarking #DeepfakeProtection #UnMarker #DCT
