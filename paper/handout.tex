@@ -1,0 +1,98 @@
+%% 1-page visual summary / "what you need to know" handout.
+%% Build: pdflatex handout.tex
+%% Use case: share on LinkedIn, attach to introduction emails, drop into
+%% a conference poster board, or send to collaborators who ask "what are
+%% you working on?"
+
+\documentclass[10pt]{article}
+\usepackage[margin=0.5in,letterpaper]{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{titlesec}
+\titleformat*{\section}{\small\bfseries}
+\titlespacing*{\section}{0pt}{4pt}{1pt}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textbf{Distribution-Preserving QIM}}\\[2pt]
+{\large An invisible image watermark that survives UnMarker-class attacks}\\[4pt]
+{\small \textbf{Abhishek Sairam Gaduputi} \,\textbar\, M.S.\ CS, NJIT \,\textbar\,
+\texttt{ag2936@njit.edu}}\\
+{\small \href{https://github.com/sairam782/Invisible-Watermarking}{\texttt{github.com/sairam782/Invisible-Watermarking}}}
+\end{center}
+
+\section*{The problem}
+UnMarker (IEEE S\&P 2025) removes $>$50\% of watermarks from Google
+SynthID and Meta's Stable Signature in under two minutes --- fully
+black-box, no key, no decoder access. It works by spotting the
+\emph{statistical fingerprint} that classical QIM watermarks leave
+on DCT coefficient distributions (spikes at lattice points), then
+dispersing those spikes with calibrated noise. Every QIM-family
+watermark shares this weakness.
+
+\section*{Our idea --- Distribution-Preserving QIM (DP-QIM)}
+Replace the uniform QIM lattice $\{k\Delta + b\Delta/2\}$ with a
+\emph{CDF-partitioned lattice}. Fit the empirical DCT coefficient
+distribution on natural images, split into $2M$ equal-mass cells
+with alternating bit labels $\{0,1,0,1,\ldots\}$. To embed bit $b$:
+if the current coefficient's cell already has label $b$, do
+nothing (free lunch, $\sim$50\% of blocks); else, replace with a
+natural sample drawn from the adjacent cell's safety-margin
+interior. The watermarked marginal is
+$P_W = \tfrac{1}{2}F + \tfrac{1}{2}F_\epsilon$ --- close to natural
+for small $\epsilon$, with $\mathrm{KS}(P_W, F) \to 0$ analytically.
+
+\section*{Headline result against UnMarker-style attack}
+A reimplementation of the UnMarker peak-density attack, run on both
+a photo-statistics-preserving synthetic benchmark and 9 real
+photos:
+
+\begin{center}
+\begin{tabular}{llcc}
+\toprule
+Attack strength & Benchmark & DCT-QIM post-attack & DP-QIM post-attack \\
+\midrule
+threshold 2.0, jitter 1.0 & Synthetic & 0.771 & \textbf{0.914} \\
+threshold 2.0, jitter 1.0 & Real photos & 0.764 & \textbf{0.887} \\
+threshold 1.5, jitter 1.0 & Synthetic & 0.777 & \textbf{0.893} \\
+threshold 1.5, jitter 1.0 & Real photos & 0.736 & \textbf{0.823} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{+8 to +14 percentage points} of bit accuracy retained under attacks
+calibrated to break the classical baseline. The bars below show the pattern
+on both benchmarks.
+
+\begin{center}
+\includegraphics[width=0.85\linewidth]{figures/fig3_unmarker.pdf}
+\end{center}
+
+\section*{Secondary wins at matched fidelity}
+On the standard attack suite DP-QIM also beats baseline on Gaussian
+blur ($+28$ to $+36$~pp), downscale ($+27$ to $+37$~pp), and heavy
+JPEG ($+3$ to $+9$~pp), at matched or better PSNR.
+
+\section*{Infrastructure contribution --- autoresearch loop}
+The DP-QIM hyperparameter space (uv position, cell count $M$, safety
+margin $\epsilon$, pool size) is searched automatically by a
+CPU-only autoresearch loop. 369 trials in 5 min yielded a 31-config
+Pareto frontier that strictly dominates the classical baseline on
+the synthetic benchmark. The loop, attack module, and all
+reproducibility scripts are public.
+
+\begin{center}
+\small Code: \texttt{\href{https://github.com/sairam782/Invisible-Watermarking}{github.com/sairam782/Invisible-Watermarking}}
+\quad\textbar\quad
+Branch: \texttt{claude/research-paper-publication-6wnwmd}
+\quad\textbar\quad
+License: MIT
+\end{center}
+
+\end{document}
