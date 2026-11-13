@@ -12,6 +12,15 @@
 \usepackage{booktabs}
 \usepackage{url}
 \usepackage{hyperref}
+\usepackage{etoolbox}
+
+% Use colon separators instead of the IEEE template's automatic em dashes.
+\patchcmd{\abstract}{---}{:\ }{}{
+  \PackageError{paper}{Could not replace the abstract separator}{}
+}
+\patchcmd{\IEEEkeywords}{---}{:\ }{}{
+  \PackageError{paper}{Could not replace the keywords separator}{}
+}
 
 \newtheorem{proposition}{Proposition}
 
