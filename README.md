@@ -33,7 +33,7 @@ tests/          pytest suite
 paper/          LaTeX manuscript (paper/main.tex)
 results/v2/     results reported in the paper
 submission/     files to upload to TechRxiv / arXiv
-FINDINGS.md     research log, including the v1 audit
+FINDINGS.md     why the evaluation was rebuilt (v1 audit) and the v2 findings
 ```
 
 ## Reproduce the paper
