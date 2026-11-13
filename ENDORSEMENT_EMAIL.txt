@@ -2,9 +2,9 @@ Subject: Request for arXiv endorsement (cs.CR) — watermarking preprint
 
 Dear Dr. <NAME>,
 
-I am an M.S. student in Computer Science at NJIT and have written a short
-paper on invisible image watermarking. I would like to post it on arXiv
-(primary cs.CR, cross-list cs.CV) and, as a first-time submitter, need an
+I am a graduate student in the Department of Data Science at NJIT and have
+written a short paper on invisible image watermarking. I would like to
+post it on arXiv (primary cs.CR, cross-list cs.CV) and, as a first-time submitter, need an
 endorsement from an existing author in that category. Endorsing only
 confirms the paper is appropriate for the category; it does not make you a
 co-author or imply review.
@@ -37,5 +37,5 @@ I am happy to send the PDF if you would like to look at it first.
 Thank you for your time,
 
 Abhishek Sairam Gaduputi
-M.S. Computer Science, New Jersey Institute of Technology
+Department of Data Science, New Jersey Institute of Technology
 ag2936@njit.edu

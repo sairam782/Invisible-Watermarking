@@ -4,7 +4,7 @@
 
 \documentclass[conference,10pt]{IEEEtran}
 
-\usepackage{cite}
+\usepackage[nocompress]{cite}
 \usepackage{amsmath,amssymb,amsfonts,amsthm}
 \usepackage{graphicx}
 \usepackage{multirow}
@@ -21,7 +21,7 @@
 Undetectability and Scaling Robustness in Invisible Watermarking}
 
 \author{\IEEEauthorblockN{Abhishek Sairam Gaduputi}
-\IEEEauthorblockA{Department of Computer Science\\
+\IEEEauthorblockA{Department of Data Science\\
 New Jersey Institute of Technology\\
 Newark, NJ 07102, USA\\
 ag2936@njit.edu}}
@@ -42,12 +42,12 @@ undetectable: a learned histogram detector reaches ROC-AUC
 $0.52\,[0.49,0.57]$ against DP-QIM versus $0.90\,[0.78,1.00]$ against QIM at
 64~bits, and $0.61$ versus $1.00$ at 256~bits, while the UnMarker peak
 statistic stays at chance. Because one-bit DP-QIM cells split at the
-coefficient median---exactly zero for the AC coefficient we use---decoding is a
+coefficient median, which is exactly zero for the AC coefficient we use, decoding is a
 sign test that is invariant to amplitude scaling, giving $+35$~pp bit accuracy
 under Gaussian blur, $+34$~pp under $0.5\times$ downscaling and $+20$~pp under
 $0.5\times$ contrast scaling. The price is noise margin: QIM is more robust to
 JPEG ($Q{=}90$: $-15$~pp; $Q{=}70$: $-28$~pp) and additive noise ($-14$~pp), and
-an UnMarker-style removal attack degrades DP-QIM 3--7~pp more than QIM.
+an UnMarker-style removal attack degrades DP-QIM 3 to 7~pp more than QIM.
 Statistical undetectability alone therefore does not confer removal
 resistance. Code and the full evaluation protocol are
 released.\footnote{\url{https://github.com/sairam782/Invisible-Watermarking}}
@@ -74,7 +74,7 @@ Quantization index modulation (QIM)~\cite{Chen2001qim} and its descendants are
 especially exposed to the first kind of attack. QIM writes each carrier
 coefficient onto one of two interleaved lattices, so the marginal histogram of
 watermarked coefficients collapses onto isolated spikes
-(Fig.~\ref{fig:hist}, middle)---a fingerprint natural images do not have.
+(Fig.~\ref{fig:hist}, middle), a fingerprint natural images do not have.
 This paper asks a narrow question: \emph{if a QIM-style watermark is
 constrained to leave the coefficient marginal natural, what does it gain and
 what does it lose?}
@@ -130,7 +130,7 @@ do not compare against these gain-invariant variants
 \textbf{Learned watermarks.} HiDDeN~\cite{Zhu2018hidden},
 StegaStamp~\cite{Tancik2020stegastamp}, Stable
 Signature~\cite{Fernandez2023stablesignature} and
-InvisMark~\cite{Xu2025invismark} train encoder--decoder networks against
+InvisMark~\cite{Xu2025invismark} train encoder-decoder networks against
 differentiable distortion layers. They are robust to common processing but
 remain vulnerable to regeneration~\cite{Zhao2023removable} and to
 UnMarker~\cite{Kassis2025unmarker}. Analogous statistical-signature concerns
@@ -238,7 +238,7 @@ is tested exactly once.
 \textbf{Matched fidelity.} Both methods embed $P{=}64$ bits at the same
 position (main results at $(3,3)$). We sweep DP-QIM's margin
 $\epsilon\in\{0.5,1,2,3,4,6\}$ and QIM's step
-$\Delta\in\{6,\dots,128\}$ (15 values spanning 46--72~dB), and compare
+$\Delta\in\{6,\dots,128\}$ (15 values spanning 46 to 72~dB), and compare
 DP-QIM against the QIM curve linearly interpolated to DP-QIM's mean PSNR. We
 never extrapolate beyond the sweep. Our main operating point is $\epsilon{=}2$
 (53.9~dB), the smallest margin that decodes without attack (accuracy 0.999;
@@ -292,7 +292,7 @@ even though only 6\% of blocks carry payload. Against DP-QIM it is at or near
 chance at 64 and 256~bits, and its confidence intervals do not overlap QIM's.
 The UnMarker peak statistic, which is the cue a statistical removal attack
 relies on, is at chance for DP-QIM at 64 and 256~bits and rises only to
-0.59 at full density, against 0.72--0.99 for QIM. At full density the learned
+0.59 at full density, against 0.72 to 0.99 for QIM. At full density the learned
 detector does gain some purchase on DP-QIM (0.77), consistent with
 Prop.~\ref{prop:ks}: the safe-interior pool removes mass near the cell
 boundary, a deficit that becomes measurable when every block is rewritten.
@@ -320,8 +320,8 @@ additive noise (bottom row).}
 \end{figure*}
 
 Table~\ref{tab:robust} and Fig.~\ref{fig:curves} show a clear split. Under
-attacks that scale the carrier---Gaussian blur, downscaling and strong
-contrast reduction---DP-QIM retains 0.83--0.97 accuracy while matched QIM is
+attacks that scale the carrier (Gaussian blur, downscaling and strong
+contrast reduction), DP-QIM retains 0.83 to 0.97 accuracy while matched QIM is
 near chance, a gain of $+20$ to $+35$~pp. Mild contrast scaling ($\times0.8$)
 moves QIM carriers by less than $\Delta/4$ and leaves both methods intact, as
 Prop.~\ref{prop:scale}(ii) predicts. Under JPEG and additive noise the
@@ -334,7 +334,7 @@ ordinary natural values whose distance to the cell boundary is often small.
 The UnMarker-style attack reduces DP-QIM to 0.97 ($\tau{=}2,j{=}0.5$) and 0.91
 ($\tau{=}1.5,j{=}1$) bit accuracy, 3 and 7~pp below matched QIM. Because
 DP-QIM shows no histogram peaks, the attack's flagged bins mostly reflect image
-content, and its jitter then acts as additive noise---the regime in which QIM's
+content, and its jitter then acts as additive noise, the regime in which QIM's
 larger margin wins. Undetectability thus does not by itself translate into
 removal resistance. What it does deny the attacker is the ability to tell
 watermarked from unwatermarked images (Table~\ref{tab:detect}), so a removal
@@ -403,7 +403,7 @@ CNN steganalyzers~\cite{Fridrich2012richmodels} may detect DP-QIM better.
 \item \textbf{Capacity and fidelity.} One bit per block at a single position;
 $M>1$ was numerically fragile. Because a moved carrier is replaced by a random
 natural sample, DP-QIM's distortion is higher than necessary and its operating
-range at 64~bits is 51--55~dB, whereas QIM reaches above 70~dB. Sampling the
+range at 64~bits is 51 to 55~dB, whereas QIM reaches above 70~dB. Sampling the
 replacement conditionally on the original magnitude could raise fidelity
 without breaking Prop.~\ref{prop:ks}.
 \end{itemize}

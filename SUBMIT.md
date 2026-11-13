@@ -51,8 +51,8 @@ TechRxiv is IEEE's preprint server. Posted preprints get a citeable DOI
    - **Title**: *Distribution-Preserving QIM: Trading Noise Margin for
      Statistical Undetectability and Scaling Robustness in Invisible
      Watermarking*
-   - **Author**: Abhishek Sairam Gaduputi — New Jersey Institute of
-     Technology — ag2936@njit.edu (corresponding author)
+   - **Author**: Abhishek Sairam Gaduputi, Department of Data Science,
+     New Jersey Institute of Technology, ag2936@njit.edu (corresponding author)
    - **Abstract**: the abstract paragraph (plain text, no LaTeX).
    - **Keywords**: invisible watermarking; quantization index modulation;
      DCT; steganalysis; valumetric scaling; content provenance
