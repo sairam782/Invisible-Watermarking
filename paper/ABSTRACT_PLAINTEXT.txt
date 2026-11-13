@@ -1,0 +1,45 @@
+TITLE
+=====
+Distribution-Preserving QIM: Trading Noise Margin for Statistical
+Undetectability and Scaling Robustness in Invisible Watermarking
+
+
+PLAINTEXT ABSTRACT (paste into the arXiv / TechRxiv abstract field; < 1920 chars)
+=================================================================================
+
+Quantization index modulation (QIM) watermarks write DCT coefficients onto a lattice, leaving a discrete histogram fingerprint of the kind that black-box removal attacks such as UnMarker search for. We study Distribution-Preserving QIM (DP-QIM), which partitions the natural distribution of a DCT coefficient into equal-mass cells and, when a coefficient must change cells to carry its bit, replaces it with a natural sample from the target cell. We compare DP-QIM with classical QIM at the same DCT position and matched PSNR on 44 crops from 15 real photographs, using source-grouped cross-validation and bootstrap confidence intervals. DP-QIM is close to undetectable: a learned histogram detector reaches ROC-AUC 0.52 [0.49, 0.57] against DP-QIM versus 0.90 [0.78, 1.00] against QIM at 64 bits, and 0.61 versus 1.00 at 256 bits, while the UnMarker peak statistic stays at chance. Because one-bit DP-QIM cells split at the coefficient median, which is exactly zero for the AC coefficient we use, decoding is a sign test that is invariant to amplitude scaling, giving +35 pp bit accuracy under Gaussian blur, +34 pp under 0.5x downscaling and +20 pp under 0.5x contrast scaling. The price is noise margin: QIM is more robust to JPEG (Q=90: -15 pp; Q=70: -28 pp) and additive noise (-14 pp), and an UnMarker-style removal attack degrades DP-QIM 3-7 pp more than QIM. Statistical undetectability alone therefore does not confer removal resistance. Code and the full evaluation protocol are released at https://github.com/sairam782/Invisible-Watermarking.
+
+
+COMMENTS FIELD
+==============
+5 pages, 2 figures, 3 tables. Code: https://github.com/sairam782/Invisible-Watermarking
+
+
+CATEGORIES
+==========
+arXiv:    primary cs.CR, cross-list cs.CV and eess.IV
+TechRxiv: Signal Processing / Security
+
+
+LINKEDIN POST (after the preprint is live)
+==========================================
+
+New preprint: "Distribution-Preserving QIM".
+
+Classical QIM watermarks leave spikes in the DCT histogram, which is
+exactly what black-box removal attacks look for. We built a QIM variant
+that leaves the histogram natural, and measured what that buys and costs
+at matched image quality on real photos:
+
+  * Detectability: learned detector AUC 0.52 (DP-QIM) vs 0.90 (QIM)
+  * Blur / downscaling / contrast: +20 to +35 pp bit accuracy
+  * JPEG / noise: -14 to -28 pp, and no gain against UnMarker-style removal
+
+Hiding the watermark's statistics is a real lever, but it is not a free
+lunch, and it is not by itself a defense against removal. The evaluation
+protocol (source-grouped CV, matched PSNR, bootstrap CIs) is open source.
+
+Paper: <preprint link>
+Code:  https://github.com/sairam782/Invisible-Watermarking
+
+#InvisibleWatermarking #DeepfakeDetection #ContentProvenance #Security

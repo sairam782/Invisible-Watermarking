@@ -60,6 +60,7 @@ class DCTWatermarkConfig:
     delta: float = 16.0       # QIM step size (larger = more robust, less invisible)
     seed: int = 1337          # controls block selection order
     payload_bits: int = 64    # payload length in bits
+    uv: tuple[int, int] = MID_UV  # DCT position; must match DP-QIM's for a fair comparison
 
 
 def _block_order(num_blocks: int, payload_bits: int, seed: int) -> np.ndarray:
@@ -87,7 +88,7 @@ def encode(rgb: np.ndarray, bits: np.ndarray, cfg: DCTWatermarkConfig | None = N
     n_blocks = hb * wb
 
     order = _block_order(n_blocks, cfg.payload_bits, cfg.seed)
-    u, v = MID_UV
+    u, v = cfg.uv
 
     dct_blocks = _dct2(blocks)                              # (Hb, Wb, 8, 8)
     flat = dct_blocks.reshape(n_blocks, BLOCK, BLOCK)
@@ -113,7 +114,7 @@ def decode(rgb: np.ndarray, cfg: DCTWatermarkConfig | None = None) -> np.ndarray
     n_blocks = hb * wb
 
     order = _block_order(n_blocks, cfg.payload_bits, cfg.seed)
-    u, v = MID_UV
+    u, v = cfg.uv
 
     dct_blocks = _dct2(blocks)
     flat = dct_blocks.reshape(n_blocks, BLOCK, BLOCK)

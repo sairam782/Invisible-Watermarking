@@ -1,0 +1,41 @@
+Subject: Request for arXiv endorsement (cs.CR) — watermarking preprint
+
+Dear Dr. <NAME>,
+
+I am a graduate student in the Department of Data Science at NJIT and have
+written a short paper on invisible image watermarking. I would like to
+post it on arXiv (primary cs.CR, cross-list cs.CV) and, as a first-time submitter, need an
+endorsement from an existing author in that category. Endorsing only
+confirms the paper is appropriate for the category; it does not make you a
+co-author or imply review.
+
+If you are willing, please go to https://arxiv.org/auth/endorse and enter
+my endorsement code:
+
+    <YOUR ENDORSEMENT CODE>
+
+Paper (5 pages, 2 figures, 3 tables):
+
+  Title: Distribution-Preserving QIM: Trading Noise Margin for Statistical
+         Undetectability and Scaling Robustness in Invisible Watermarking
+
+  Summary: QIM watermarks leave a lattice fingerprint in DCT coefficient
+  histograms that removal attacks such as UnMarker exploit. We study a QIM
+  variant that keeps the coefficient distribution natural and compare it
+  with classical QIM at matched PSNR on real photographs, with
+  source-grouped cross-validation and bootstrap confidence intervals. It is
+  close to undetectable (learned-detector AUC 0.52 vs 0.90 at 64 bits) and
+  gains 20-35 percentage points under blur, downscaling and contrast
+  scaling, but loses 14-28 points under JPEG and noise and gives no
+  advantage against UnMarker-style removal.
+
+  Preprint: <TECHRXIV DOI, once posted>
+  Code: https://github.com/sairam782/Invisible-Watermarking
+
+I am happy to send the PDF if you would like to look at it first.
+
+Thank you for your time,
+
+Abhishek Sairam Gaduputi
+Department of Data Science, New Jersey Institute of Technology
+ag2936@njit.edu
