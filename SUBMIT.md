@@ -1,141 +1,124 @@
-# How to submit this paper — the actual step-by-step
+# How to submit the paper (deadline: Nov 15)
 
-**I (the AI agent) cannot press "submit" on any site for you.** Every
-preprint server and conference management system requires a human
-account + manual clicking. The guide below gives you the shortest
-reliable paths.
+Everything you upload is in the [`submission/`](submission/) folder of this
+branch. Download it from GitHub (green **Code** button → **Download ZIP**, or
+open each file and click **Download raw file**).
+
+| File | Used for |
+|---|---|
+| `submission/Gaduputi_DP-QIM_preprint.pdf` | The paper (5 pages). Upload this to TechRxiv. |
+| `submission/arxiv_source.zip` | LaTeX source. Upload this to arXiv (it compiles on its own). |
+| `submission/ABSTRACT_PLAINTEXT.txt` | Title, abstract, comments line, categories, keywords to paste. |
+
+An AI agent cannot create accounts or press "submit"; the steps below are yours.
+Website menus change over time, so if a button has a slightly different name,
+look for the closest equivalent.
 
 ---
 
-## The decision tree (look at this first)
+## Step 0 — Before submitting (15 minutes, do this first)
 
+1. **Read the PDF once, start to finish.** You are the sole author; you must be
+   able to explain every claim, Propositions 1–2 and the evaluation protocol.
+2. **Make the code link work.** The paper links to
+   `https://github.com/sairam782/Invisible-Watermarking`.
+   - Repo → **Settings** → **General** → scroll to **Danger Zone** →
+     **Change visibility** → **Public** (skip if it already is).
+   - Merge this branch into `main` so visitors see the v2 code:
+     repo page → **Pull requests** → **New pull request** →
+     base `main` ← compare `claude/research-paper-publication-6wnwmd` →
+     **Create pull request** → **Merge pull request**.
+3. The AI-assistance disclosure is already in the paper's Acknowledgment
+   section. If a submission form asks about AI use, answer **yes** and say the
+   same thing: Claude (Anthropic) was used for code development, experiment
+   automation and manuscript drafting; you reviewed everything and take full
+   responsibility.
+
+---
+
+## Step 1 — TechRxiv (recommended for Nov 15: no endorsement needed)
+
+TechRxiv is IEEE's preprint server. Posted preprints get a citeable DOI
+(`10.36227/techrxiv.…`).
+
+1. Go to **https://www.techrxiv.org** → **Submit** (or **Log in / Sign up**).
+   Create an account with your NJIT email and verify it. You may be asked to
+   connect an ORCID iD — if you don't have one, create it free at
+   https://orcid.org (2 minutes); it is useful for every future paper.
+2. Start a new preprint submission and upload
+   `Gaduputi_DP-QIM_preprint.pdf` as the main file.
+3. Fill the metadata from `ABSTRACT_PLAINTEXT.txt`:
+   - **Title**: *Distribution-Preserving QIM: Trading Noise Margin for
+     Statistical Undetectability and Scaling Robustness in Invisible
+     Watermarking*
+   - **Author**: Abhishek Sairam Gaduputi — New Jersey Institute of
+     Technology — ag2936@njit.edu (corresponding author)
+   - **Abstract**: the abstract paragraph (plain text, no LaTeX).
+   - **Keywords**: invisible watermarking; quantization index modulation;
+     DCT; steganalysis; valumetric scaling; content provenance
+   - **Subject / category**: Signal Processing (image processing) and/or
+     Security — pick the closest options offered.
+4. **License**: CC BY 4.0 is the usual choice and keeps you free to submit
+   to a conference later.
+5. Declarations: not previously published = yes; conflicts of interest =
+   none; funding = none; AI use = yes (see Step 0.3).
+6. Optionally attach `arxiv_source.zip` as supplementary material.
+7. **Submit.** TechRxiv screens submissions before posting; this usually
+   takes a few business days, which is why submitting **today** matters.
+8. When it is posted you get a DOI and a URL. **Paste them into the chat**
+   so the repo README and the LinkedIn post can be updated.
+
+> Submitting by Nov 15 meets the "submit the draft" goal. The paper is
+> "published" as a preprint once TechRxiv posts it (target: before Nov 30).
+
+---
+
+## Step 2 — arXiv (optional, can follow TechRxiv)
+
+Posting on both TechRxiv and arXiv is allowed. arXiv needs an endorsement
+for first-time submitters in cs.CR; this is a one-click action by any
+existing cs.CR / cs.CV / eess.IV author.
+
+1. Register at https://arxiv.org/user/register with your NJIT email.
+2. Start a submission at https://arxiv.org/submit. If you need an
+   endorsement, arXiv shows an **endorsement code**. Send it with
+   `ENDORSEMENT_EMAIL.txt` to someone who has published in cs.CR or cs.CV
+   (anyone with arXiv papers in that area; it does not make them a
+   co-author or collaborator).
+3. Once endorsed:
+   - License: arXiv non-exclusive license (default) or CC BY 4.0.
+   - Primary category **cs.CR**; cross-list **cs.CV** and **eess.IV**.
+   - Upload `arxiv_source.zip` → **Process**. It should compile to the same
+     5-page PDF. If arXiv reports an error, paste it into the chat.
+   - Title, author, abstract and comments line from
+     `ABSTRACT_PLAINTEXT.txt`.
+   - **Submit**. It appears at the next announcement (Sun–Thu, 20:00 US
+     Eastern) after moderation.
+
+---
+
+## Step 3 — Peer-reviewed venue (after the preprint)
+
+A preprint is not peer-reviewed. To turn it into a conference paper,
+submit to one of (check each site for the current deadline):
+
+- **IEEE WIFS** (Workshop on Information Forensics and Security)
+- **ACM IH&MMSec** (Information Hiding & Multimedia Security)
+- **IEEE ICIP / ICASSP** (image/signal processing, 4–5 page format)
+
+Reviewers will likely ask for (a) a standard benchmark such as Kodak or
+DIV2K, (b) a gain-invariant QIM baseline such as Rational Dither
+Modulation, and (c) a stronger steganalysis detector. These are the next
+experiments to run before a venue submission.
+
+---
+
+## Rebuilding the files (if anything changes)
+
+```bash
+cd paper && pdflatex main && bibtex main && pdflatex main && pdflatex main && cd ..
+python -m experiments.build_arxiv_package --out /tmp/arxiv_package
+cp paper/main.pdf submission/Gaduputi_DP-QIM_preprint.pdf
+cp /tmp/arxiv_package.zip submission/arxiv_source.zip
+cp paper/ABSTRACT_PLAINTEXT.txt submission/
 ```
-Do you have a verified arXiv account with endorsement for cs.CR?
-├── YES  → go to Section A (arXiv)
-└── NO   → is Nov 15 close enough that endorsement may not land in time?
-           ├── YES → go to Section B (TechRxiv) — same-day posting, no
-           │        endorsement. Submit here to hit the deadline.
-           │        You can also submit to arXiv later (dual-posting
-           │        is explicitly allowed by both).
-           └── NO  → go to Section A (arXiv) and start the endorsement
-                    today.
-```
-
-## A quick email you can send to a professor for the arXiv endorsement
-
-See `ENDORSEMENT_EMAIL.txt` in this repo. Paste into your mail client,
-replace `<PROFESSOR NAME>` and `<YOUR ENDORSEMENT CODE>` from
-<https://arxiv.org/auth/need-endorsement>, send to any professor at
-NJIT who has an arXiv cs.CR, cs.CV, or cs.MM paper.
-
----
-
-# SECTION A — arXiv submission
-
-Target: <https://arxiv.org/submit>.
-Expected time once endorsed: ~30 minutes to submit; ~1 business day
-until publicly listed.
-
-## A.0 Account + endorsement (required once)
-
-1. Register: <https://arxiv.org/user/register> (use your NJIT email).
-2. Verify email.
-3. Add + verify a phone number via SMS.
-4. Request endorsement: <https://arxiv.org/auth/need-endorsement>.
-   Send the code to a professor who's published in cs.CR, cs.CV, or
-   cs.MM. See `ENDORSEMENT_EMAIL.txt`.
-
-## A.1 Submit
-
-Once the endorsement arrives:
-
-1. <https://arxiv.org/submit> → **"Start new submission"**.
-2. **License**: "arXiv.org perpetual, non-exclusive license" (default).
-3. **Primary archive**: `cs`.
-4. **Primary subject class**: `cs.CR` (Cryptography and Security).
-5. **Cross-list**: add `cs.CV` (Computer Vision).
-6. **Title**:
-   `Distribution-Preserving QIM: An Invisible Watermark that Preserves the Natural DCT Marginal Distribution`
-7. **Authors**: `Abhishek Sairam Gaduputi`
-   (affiliation `New Jersey Institute of Technology`)
-8. **Abstract**: paste the entire contents of `paper/ABSTRACT_PLAINTEXT.txt`
-   (the top block, before the LinkedIn section).
-9. **Comments**: `6 pages, 3 figures, 4 tables. Code at https://github.com/sairam782/Invisible-Watermarking`
-10. **Upload**: drag `arxiv_package.zip`.
-11. **Process files**: let AutoTeX compile. If it errors, screenshot
-    and send to me — I'll fix and rebuild.
-12. **Preview**: should match the 6-page PDF I sent.
-13. **Submit**. Moderators review within ~1 business day; the paper
-    becomes public at the next weekday 20:00 US-Eastern announcement.
-
-## A.2 After submission
-
-- Save the submission ID (format `2611.XXXXX`).
-- Paste back here so I can update the repo README with the link.
-- Use `paper/ABSTRACT_PLAINTEXT.txt` (bottom section) as the LinkedIn /
-  Twitter post, with the arXiv URL filled in.
-
----
-
-# SECTION B — TechRxiv (fastest fallback, no endorsement)
-
-Target: <https://www.techrxiv.org>.
-Expected time: ~1 business day from upload to public listing.
-Dual-posting with arXiv is explicitly permitted — you can do both.
-
-## B.1 Submit
-
-1. Register at <https://www.techrxiv.org/register>. Use NJIT email.
-   No endorsement, no SMS.
-2. Verify email.
-3. Dashboard → "New preprint".
-4. **Title + authors**: same as Section A.
-5. **Abstract**: same plaintext from `paper/ABSTRACT_PLAINTEXT.txt`.
-6. **Subject categories**: Computer and Information Science →
-   Security and Privacy; cross-list Computer Vision and Pattern
-   Recognition.
-7. **Keywords**: `invisible watermarking; DCT; QIM; deepfake
-   provenance; UnMarker; distribution-preserving embedding`.
-8. **Upload file**: upload the compiled `main.pdf` (NOT the zip —
-   TechRxiv only takes PDF for the primary file).
-9. **Supplemental files** (optional): attach `arxiv_package.zip` as
-   source, plus `README.txt` from inside it.
-10. **Submit for posting**. Automated plagiarism + format check
-    completes in minutes; human screening ~1 business day.
-11. Once posted, you get a DOI (e.g.`10.36227/techrxiv.XXXXX`).
-
-This DOI is a real, citeable publication identifier. The "publish by
-Nov 30" goal is satisfied once the TechRxiv listing is live.
-
----
-
-# SECTION C — Workshop / journal (slower, in parallel)
-
-Once the preprint is up (from A or B), submit to a formal venue for
-peer review:
-
-- **IEEE WIFS 2027** — <https://wifs2027.ieee-sp.org> (check deadline
-  closer to date; typical Sept). Our paper targets this venue.
-- **IH&MMSec 2027** — ACM Information Hiding & Multimedia Security,
-  typical Jan deadline.
-- **SaTML 2027** — Society for the Advancement of Trustworthy
-  Machine Learning, typical Oct deadline.
-
-Submission via EasyChair or OpenReview; no endorsement required.
-
----
-
-# What's in your submission package
-
-- `arxiv_package.zip` (58 KB): LaTeX source + bbl + 3 figure PDFs,
-  ready to upload to arXiv (Section A step 10).
-- `paper/main.pdf` (6 pages, 307 KB): compiled PDF, upload directly
-  to TechRxiv (Section B step 8).
-- `paper/ABSTRACT_PLAINTEXT.txt`: paste-ready abstract + LinkedIn
-  draft.
-- `ENDORSEMENT_EMAIL.txt`: send to a professor for the arXiv
-  endorsement.
-- `SUBMIT.md` (this file): the decision tree.
-
-All of the above are in the GitHub repo on branch
-`claude/research-paper-publication-6wnwmd`.

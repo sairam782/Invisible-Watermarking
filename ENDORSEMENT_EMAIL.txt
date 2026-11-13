@@ -1,48 +1,41 @@
 Subject: Request for arXiv endorsement (cs.CR) — watermarking preprint
 
-Dear Dr. <PROFESSOR NAME>,
+Dear Dr. <NAME>,
 
-I'm an M.S. student in Computer Science at NJIT working on a research
-paper on invisible image watermarking. I'd like to post the preprint on
-arXiv (primary category cs.CR, cross-list cs.CV) and need an
-endorsement from a registered submitter in one of those categories.
+I am an M.S. student in Computer Science at NJIT and have written a short
+paper on invisible image watermarking. I would like to post it on arXiv
+(primary cs.CR, cross-list cs.CV) and, as a first-time submitter, need an
+endorsement from an existing author in that category. Endorsing only
+confirms the paper is appropriate for the category; it does not make you a
+co-author or imply review.
 
-Would you be willing to endorse me? If yes, please go to:
+If you are willing, please go to https://arxiv.org/auth/endorse and enter
+my endorsement code:
 
-  https://arxiv.org/auth/endorse
+    <YOUR ENDORSEMENT CODE>
 
-and enter my endorsement code:
+Paper (5 pages, 2 figures, 3 tables):
 
-  <YOUR ENDORSEMENT CODE>    (you can find this at
-                              https://arxiv.org/auth/need-endorsement
-                              after logging in to your arXiv account)
+  Title: Distribution-Preserving QIM: Trading Noise Margin for Statistical
+         Undetectability and Scaling Robustness in Invisible Watermarking
 
-A short summary of the paper (6 pages, 3 figures, 4 tables):
+  Summary: QIM watermarks leave a lattice fingerprint in DCT coefficient
+  histograms that removal attacks such as UnMarker exploit. We study a QIM
+  variant that keeps the coefficient distribution natural and compare it
+  with classical QIM at matched PSNR on real photographs, with
+  source-grouped cross-validation and bootstrap confidence intervals. It is
+  close to undetectable (learned-detector AUC 0.52 vs 0.90 at 64 bits) and
+  gains 20-35 percentage points under blur, downscaling and contrast
+  scaling, but loses 14-28 points under JPEG and noise and gives no
+  advantage against UnMarker-style removal.
 
-  Title: Distribution-Preserving QIM: An Invisible Watermark that
-         Preserves the Natural DCT Marginal Distribution
+  Preprint: <TECHRXIV DOI, once posted>
+  Code: https://github.com/sairam782/Invisible-Watermarking
 
-  Abstract (one paragraph): Recent black-box removal attacks against
-  invisible image watermarks (notably UnMarker, IEEE S&P 2025) succeed
-  by detecting the statistical fingerprint that quantization-index-
-  modulation watermarks leave on the DCT coefficient distribution. We
-  propose Distribution-Preserving QIM, which replaces the uniform QIM
-  lattice with a CDF-partitioned lattice whose cells carry equal
-  natural mass and whose target values are sampled from the natural
-  distribution's safe interior. Against a reimplemented UnMarker-style
-  attack, our method retains >=89% bit accuracy at settings that drop
-  the classical DCT-QIM baseline to 77% -- a +12 to +14 percentage-
-  point survival advantage, reproduced on both synthetic and real
-  images. The full benchmark harness including the attack is open-
-  source at github.com/sairam782/Invisible-Watermarking.
+I am happy to send the PDF if you would like to look at it first.
 
-I am happy to send you the full PDF or the GitHub link if you would
-like to review it before endorsing. The paper is also already public on
-TechRxiv as a precaution in case the endorsement cannot arrive before
-my Nov 15 target.
-
-Thank you very much for your time,
+Thank you for your time,
 
 Abhishek Sairam Gaduputi
-M.S. Computer Science, NJIT
+M.S. Computer Science, New Jersey Institute of Technology
 ag2936@njit.edu
