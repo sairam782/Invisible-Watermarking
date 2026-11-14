@@ -1,0 +1,212 @@
+[
+  {
+    "payload": 64,
+    "dp_margin": 1.0,
+    "qim_delta": [
+      52,
+      64,
+      46,
+      58,
+      46
+    ],
+    "dp_psnr": 53.270574586473515,
+    "qim_psnr": 53.68389362805357,
+    "auc_aggregation": "test-crop-weighted within-fold AUC",
+    "ci_scope": "source bootstrap conditional on fitted models and fixed split",
+    "dp_auc_learned": 0.6546511627906977,
+    "dp_auc_learned_ci": [
+      0.6171082743653926,
+      0.7940948598630723
+    ],
+    "dp_auc_peak": 0.46492248062015507,
+    "dp_auc_peak_ci": [
+      0.39430836236933803,
+      0.48718749999999994
+    ],
+    "qim_auc_learned": 0.9980620155038761,
+    "qim_auc_learned_ci": [
+      0.9948697916666666,
+      1.0
+    ],
+    "qim_auc_peak": 0.6397932816537468,
+    "qim_auc_peak_ci": [
+      0.48897777113237645,
+      0.7683369447581402
+    ]
+  },
+  {
+    "payload": 64,
+    "dp_margin": 2.0,
+    "qim_delta": [
+      46,
+      62,
+      48,
+      64,
+      52
+    ],
+    "dp_psnr": 53.35978043278133,
+    "qim_psnr": 53.66042897797565,
+    "auc_aggregation": "test-crop-weighted within-fold AUC",
+    "ci_scope": "source bootstrap conditional on fitted models and fixed split",
+    "dp_auc_learned": 0.6474160206718347,
+    "dp_auc_learned_ci": [
+      0.6285448908730158,
+      0.7629624417701861
+    ],
+    "dp_auc_peak": 0.46828165374677,
+    "dp_auc_peak_ci": [
+      0.4099992559523809,
+      0.493404356060606
+    ],
+    "qim_auc_learned": 0.9470284237726098,
+    "qim_auc_learned_ci": [
+      0.9093721064814815,
+      1.0
+    ],
+    "qim_auc_peak": 0.6443798449612402,
+    "qim_auc_peak_ci": [
+      0.5170468304843305,
+      0.7679121146680216
+    ]
+  },
+  {
+    "payload": 256,
+    "dp_margin": 1.0,
+    "qim_delta": [
+      54,
+      64,
+      48,
+      58,
+      56
+    ],
+    "dp_psnr": 47.230688545588926,
+    "qim_psnr": 47.41767267024475,
+    "auc_aggregation": "test-crop-weighted within-fold AUC",
+    "ci_scope": "source bootstrap conditional on fitted models and fixed split",
+    "dp_auc_learned": 0.7847545219638242,
+    "dp_auc_learned_ci": [
+      0.7561359162895928,
+      0.9185522700119474
+    ],
+    "dp_auc_peak": 0.44412144702842377,
+    "dp_auc_peak_ci": [
+      0.30853196693657214,
+      0.48333457503036287
+    ],
+    "qim_auc_learned": 1.0,
+    "qim_auc_learned_ci": [
+      1.0,
+      1.0
+    ],
+    "qim_auc_peak": 0.8840439276485788,
+    "qim_auc_peak_ci": [
+      0.7374519230769231,
+      0.9970255398671096
+    ]
+  },
+  {
+    "payload": 256,
+    "dp_margin": 2.0,
+    "qim_delta": [
+      50,
+      64,
+      54,
+      64,
+      56
+    ],
+    "dp_psnr": 46.94218183358579,
+    "qim_psnr": 47.11827272605606,
+    "auc_aggregation": "test-crop-weighted within-fold AUC",
+    "ci_scope": "source bootstrap conditional on fitted models and fixed split",
+    "dp_auc_learned": 0.8364341085271318,
+    "dp_auc_learned_ci": [
+      0.7910816586986468,
+      0.9217397422301983
+    ],
+    "dp_auc_peak": 0.49521963824289406,
+    "dp_auc_peak_ci": [
+      0.3899075496675943,
+      0.5859721068660022
+    ],
+    "qim_auc_learned": 1.0,
+    "qim_auc_learned_ci": [
+      1.0,
+      1.0
+    ],
+    "qim_auc_peak": 0.8330103359173127,
+    "qim_auc_peak_ci": [
+      0.6676099941724941,
+      1.0
+    ]
+  },
+  {
+    "payload": 1024,
+    "dp_margin": 1.0,
+    "qim_delta": [
+      54,
+      62,
+      50,
+      58,
+      56
+    ],
+    "dp_psnr": 41.2678675249232,
+    "qim_psnr": 41.41685229406452,
+    "auc_aggregation": "test-crop-weighted within-fold AUC",
+    "ci_scope": "source bootstrap conditional on fitted models and fixed split",
+    "dp_auc_learned": 0.8767441860465117,
+    "dp_auc_learned_ci": [
+      0.8342235757939538,
+      1.0
+    ],
+    "dp_auc_peak": 0.5985142118863049,
+    "dp_auc_peak_ci": [
+      0.3661473214285714,
+      0.7994063101066616
+    ],
+    "qim_auc_learned": 1.0,
+    "qim_auc_learned_ci": [
+      1.0,
+      1.0
+    ],
+    "qim_auc_peak": 0.9515503875968991,
+    "qim_auc_peak_ci": [
+      0.8551136363636364,
+      1.0
+    ]
+  },
+  {
+    "payload": 1024,
+    "dp_margin": 2.0,
+    "qim_delta": [
+      54,
+      64,
+      52,
+      64,
+      56
+    ],
+    "dp_psnr": 40.95876316371198,
+    "qim_psnr": 41.072794395453414,
+    "auc_aggregation": "test-crop-weighted within-fold AUC",
+    "ci_scope": "source bootstrap conditional on fitted models and fixed split",
+    "dp_auc_learned": 0.9552971576227391,
+    "dp_auc_learned_ci": [
+      0.9099368368271222,
+      1.0
+    ],
+    "dp_auc_peak": 0.6239018087855297,
+    "dp_auc_peak_ci": [
+      0.4039879414298018,
+      0.801632771164021
+    ],
+    "qim_auc_learned": 1.0,
+    "qim_auc_learned_ci": [
+      1.0,
+      1.0
+    ],
+    "qim_auc_peak": 0.9689922480620154,
+    "qim_auc_peak_ci": [
+      0.9214285714285715,
+      1.0
+    ]
+  }
+]

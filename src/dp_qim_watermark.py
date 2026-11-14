@@ -1,13 +1,13 @@
 """Distribution-Preserving QIM (DP-QIM) invisible watermark.
 
 Each payload bit snaps one mid-band DCT coefficient to a cell of a per-position
-CDF-partitioned lattice whose label matches the bit. The 2M cells carry equal
-natural mass, so the watermarked marginal matches the natural marginal — no
-discrete peak structure for statistical attackers (UnMarker-class) to detect.
+CDF-partitioned cells whose label matches the bit. Empirical quantiles aim
+for equal mass, but ties, safety margins, finite pools, and image rounding
+mean exact distribution preservation is not guaranteed.
 
 Target values are drawn from a per-cell `sample_pool` of natural samples
-restricted to a safety-margin interior of the cell. This (a) preserves the
-natural distribution (not a point-mass spike at a fixed value) and (b) keeps
+restricted to a safety-margin interior of the cell. This avoids a regular
+quantization lattice and keeps
 written values far from cell boundaries so RGB→uint8 round-trip noise cannot
 flip the decoded bit.
 """

@@ -1,10 +1,10 @@
 """UnMarker-style statistical-anomaly attack.
 
-A faithful-in-spirit reimplementation of the UnMarker attack
-(Barzegar & AlBadawy, IEEE S&P 2025). The original is fully black-box;
-ours follows the same mechanism.
+A simplified histogram-jitter stress test inspired by statistical-anomaly
+attacks. It is NOT the published UnMarker implementation (Kassis and
+Hengartner, IEEE S&P 2025), nor a validated reproduction of its algorithm.
 
-**Key insight (per the paper + press coverage):** classical QIM watermarks
+Motivation: classical QIM watermarks
 create *peak-density artifacts* in the marginal of a DCT coefficient ---
 many blocks cluster at the same lattice points. The natural distribution
 is smooth, so an attacker can detect these peaks via histogram

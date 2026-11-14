@@ -1,7 +1,7 @@
-"""Evaluation v2 — the numbers the paper reports.
+"""Corrected evaluation v3 (historical module name retained).
 
 Protocol (fixes every v1 flaw listed in FINDINGS.md):
-  * 44 real 256x256 crops from 15 photo sources, 5 folds grouped by source.
+  * Deduplicated real crops, 5 content-checked folds grouped by source.
   * Embedder CDFs and the attacker's natural reference are fitted on the
     training sources of each fold only; test sources are never seen.
   * Both methods embed at the SAME DCT position (default (3,3)).
@@ -36,11 +36,11 @@ from src.dp_qim_watermark import decode as dp_decode
 from src.dp_qim_watermark import encode as dp_encode
 from src.metrics import bit_accuracy, psnr
 from src.natural_cdf import fit_natural_cdfs
-from src.protocol import block_dct, bootstrap_ci, real_crops, source_folds, stable_seed
+from src.protocol import block_dct, bootstrap_ci, real_crops, source_folds, stable_seed, provenance
 from src.unmarker_attack import UnMarkerConfig, attack as unmarker_attack
 
 REPO = Path(__file__).resolve().parent.parent
-OUT = REPO / "results" / "v2"
+OUT = REPO / "results" / "v3"
 
 DP_MARGINS = (0.5, 1.0, 2.0, 3.0, 4.0, 6.0)
 # Extends to large steps so the baseline curve spans DP-QIM's PSNR range
@@ -88,6 +88,8 @@ def _evaluate(method, param, encode, decode, cfg, crop, suite, attacker_ref, pay
 
 
 def run_curves(uv, payload, out_path):
+    if out_path.exists():
+        raise FileExistsError("Preserve completed results; choose a new output path")
     crops = real_crops()
     suite = AttackSuite.default()
     records = []
@@ -111,9 +113,9 @@ def run_curves(uv, payload, out_path):
                               suite, attacker_ref, payload)
                 r["fold"] = fold
                 records.append(r)
-        print(f"fold {fold} done  ({time.time() - t0:.0f}s, {len(records)} records)")
+        print(f"fold {fold} done  ({time.time() - t0:.0f}s, {len(records)} records)", flush=True)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps({"uv": list(uv), "payload": payload,
+    out_path.write_text(json.dumps({"uv": list(uv), "payload": payload, "provenance": provenance(crops),
                                     "records": records}, indent=1))
     print(f"wrote {out_path}")
 

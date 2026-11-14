@@ -5,8 +5,8 @@ empirical distribution of coefficient values across a training set of natural
 images, store it as 2M equal-mass cells with alternating labels {0,1,0,1,...},
 and keep a per-cell `sample_pool` — natural samples lying inside the cell AND
 at least `safety_margin` away from either boundary. DP-QIM uses these pools
-as target values at encode time, so the watermarked marginal distribution
-follows the natural distribution.
+as target values at encode time. Finite pools, ties, and nonzero margins mean
+that exact preservation of the natural distribution is not guaranteed.
 """
 from __future__ import annotations
 
@@ -83,6 +83,8 @@ def fit_natural_cdfs(
     """Fit a NaturalCDF with 2M cells for every non-DC position (or only `positions`)."""
     if m < 1:
         raise ValueError("m must be >= 1")
+    if not np.isfinite(safety_margin) or safety_margin < 0:
+        raise ValueError("safety_margin must be finite and nonnegative")
     n_blocks = dct_coeffs.shape[0]
     if n_blocks < 2 * m:
         raise ValueError(f"need at least 2M={2*m} samples per position, got {n_blocks}")
@@ -123,7 +125,7 @@ def _cell_centers(samples: np.ndarray, edges: np.ndarray) -> np.ndarray:
     centers = np.empty(n_cells, dtype=np.float64)
     for i in range(n_cells):
         lo, hi = edges[i], edges[i + 1]
-        mask = (samples > lo) & (samples <= hi)
+        mask = (samples >= lo) & (samples < hi)
         if mask.any():
             centers[i] = np.median(samples[mask])
         else:
@@ -146,13 +148,13 @@ def _cell_sample_pools(samples, edges, safety_margin, max_pool_size, rng) -> lis
         lo_safe = lo + safety_margin if np.isfinite(lo) else -np.inf
         hi_safe = hi - safety_margin if np.isfinite(hi) else np.inf
         if lo_safe >= hi_safe:
-            mask = (samples > lo) & (samples <= hi)
+            mask = (samples >= lo) & (samples < hi)
             if mask.any():
                 pools.append(np.array([float(np.median(samples[mask]))], dtype=np.float32))
             else:
                 pools.append(np.array([0.5 * (max(lo, -100.0) + min(hi, 100.0))], dtype=np.float32))
             continue
-        mask = (samples > lo_safe) & (samples <= hi_safe)
+        mask = (samples >= lo_safe) & (samples < hi_safe)
         cell_samples = samples[mask]
         if cell_samples.size == 0:
             lo_f = lo_safe if np.isfinite(lo_safe) else hi_safe - 2 * safety_margin
