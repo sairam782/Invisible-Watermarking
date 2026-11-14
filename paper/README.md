@@ -1,45 +1,34 @@
-# Paper: Distribution-Preserving QIM
+# Corrected DP-QIM draft (v3)
 
-Preprint target: **TechRxiv or arXiv (cs.CR)**, submit by 2026-11-15.
-Venue target after preprint: IEEE WIFS or ACM IH&MMSec (IEEE conference format).
+Distribution-Preserving QIM: Histogram Detectability and Robustness Trade-offs in Invisible Watermarking
 
 ## Build
 
 ```bash
 cd paper
 pdflatex main && bibtex main && pdflatex main && pdflatex main
-pdflatex handout          # optional 1-page summary
+pdflatex handout
 ```
 
-## Where the numbers come from
-
-Nothing in the paper is hand-copied. From the repository root:
+The numbers come from `results/v3`; old `results/v2` files are superseded.
+From the repository root, regenerate tables and figures with:
 
 ```bash
-python -m experiments.eval_v2 curves --uv 3 3   # results/v2/curves_uv33_p64.{json,md}
-python -m experiments.eval_v2 curves --uv 2 2   # position ablation
-python -m experiments.eval_v2 curves --uv 4 3
-python -m experiments.detect_v2                 # results/v2/detect.{json,md}
-python -m experiments.tables_v2                 # paper/tables/*.tex
-python -m experiments.figures_v2                # paper/figures/*_v2.{pdf,png}
+python -m experiments.tables_v2
+python -m experiments.figures_v2
 ```
 
-`FINDINGS.md` (top entry) explains why the v1 numbers were withdrawn and what
-the v2 protocol fixes.
+Historical module and figure filenames retain the v2 suffix, but their active
+inputs are v3. See the root README for the full raw-data rerun procedure and
+CORRECTIONS.md for the scientific changes. The PDF is a corrected draft,
+not proof of publication readiness.
 
-## Submission package
+## Package
 
 ```bash
-python -m experiments.build_arxiv_package --out /path/to/arxiv_package
+python -m experiments.build_arxiv_package --out /path/to/a/new/package
 ```
 
-The plain-text abstract, comments line and categories are in
-`ABSTRACT_PLAINTEXT.txt`. `SUBMIT.md` in the repository root walks through
-TechRxiv and arXiv submission.
-
-## Known gaps (also listed in the paper's Limitations)
-
-- 44 crops / 15 photos; Kodak or DIV2K not yet run.
-- No gain-invariant QIM (RDM, angle QIM) or learned-watermark baselines.
-- UnMarker-style attack is a reimplementation; no regeneration attacks.
-- Histogram-only detectors; no rich-model / CNN steganalysis.
+Use an empty dedicated output directory: the packager replaces its contents.
+The source ZIP includes the bibliography, generated tables and referenced figures.
+No preprint has been submitted or endorsed by these build commands.

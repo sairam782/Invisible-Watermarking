@@ -1,52 +1,34 @@
-# Findings
+# Findings: corrected v3 evaluation
 
-Why the evaluation was rebuilt, and what the v2 results say.
+The 2026-11-13 corrections supersede the previous near-undetectability claim.
+See [CORRECTIONS.md](CORRECTIONS.md) for the mathematical and protocol details.
+The previous findings document is preserved at
+[results/v2/LEGACY_FINDINGS.md](results/v2/LEGACY_FINDINGS.md) as a withdrawn record,
+not as current evidence.
 
-## 2026-11-07 — Audit: v1 numbers were flawed; v2 protocol supersedes them
+## What was corrected
 
-A hostile-reviewer pass over the first (v1) pipeline found ten problems, so
-all v1 numbers were withdrawn. The v1 scripts and results have been removed
-from the repository (they remain in git history); everything in the paper
-comes from the v2 protocol below.
+- Removed the cat/chelsea duplicate alias; 43 crops from 14 distinct source images.
+- Enforced source and exact-content separation; missing source data fail explicitly.
+- Aligned CDF, calibration, scaler, classifier and peak-reference fitting with one
+  outer training split. QIM's training-selected step is not tuned on test images.
+- Replaced pooled cross-model scores with crop-weighted within-fold AUC.
+- Corrected the idealized cellwise-mixture formula and periodic QIM decoding claim.
+- Scoped the jitter stress test: it is not a reproduction of published UnMarker.
 
-| # | v1 flaw | Effect |
-|---|---|---|
-| 1 | Payload bits seeded with Python `hash()`, salted per process | not reproducible |
-| 2 | UnMarker attacker's "natural reference" = DP-QIM's own sample pools | circular; inflated DP-QIM's removal robustness |
-| 3 | Real-data CDFs fitted on the test images | leakage |
-| 4 | Real-data table "matched fidelity" with a 5.4 dB PSNR gap | unfair comparison |
-| 5 | Per-image KS on n=64 samples (null mean ~0.11) | KS differences were noise |
-| 6 | Real-data margin chosen by looking at test results | selection bias |
-| 7 | Autoresearch accepted configs that do not decode at identity | invalid configs on the frontier |
-| 8 | No confidence intervals | no significance |
-| 9 | Baseline hard-coded at DCT (4,3), DP-QIM at (2,2)/(3,3) | frequency confound on blur/downscale |
-| 10 | Baseline "KS" and Fig 1 "QIM" panel measured at a position the baseline never touched | baseline fingerprint never measured |
+## Corrected observations
 
-**v2 protocol** (`src/protocol.py`, `experiments/eval_v2.py`,
-`experiments/detect_v2.py`): 44 real 256x256 crops from 15 photo sources;
-5 folds grouped by source; embedder CDFs and attacker reference fitted on
-training sources only; both methods at the same DCT position; baseline curve
-interpolated to DP-QIM's PSNR (sweep extended so interpolation never clamps);
-crc32 seeds; source-level bootstrap 95% CIs; undetectability measured by
-detector ROC-AUC.
+Learned DP-QIM AUC is 0.647 / 0.836 / 0.955 at 64 / 256 / 1,024 bits,
+versus 0.947 / 1.000 / 1.000 for QIM. DP-QIM is detectable, especially at
+higher payloads. Conditional confidence intervals and held-out PSNRs are
+in the generated tables and results/v3.
 
-**What survives** (position (3,3), payload 64, matched PSNR):
-- Detectability: learned-detector AUC 0.52 [0.49, 0.57] for DP-QIM vs
-  0.90 [0.78, 1.00] for DCT-QIM; at 256 bits 0.61 vs 1.00. The UnMarker peak
-  statistic is at chance for DP-QIM (0.47–0.51) and 0.72–0.86 for DCT-QIM.
-- Blur r=1: +35 pp; downscale 0.5x: +34 pp (CIs exclude zero).
+At 64 bits, position (3,3), the matched-PSNR gain is +34.8 pp for blur,
++33.4 for downscaling and +20.8 for half contrast. JPEG 90/70 and noise
+instead favor QIM by 15.8/28.6/14.1 pp. Histogram jitter favors QIM by
+2.7 and 7.0 pp at the two reported settings.
 
-**What reverses**: the UnMarker-style removal attack degrades DP-QIM 3–7 pp
-*more* than DCT-QIM at matched PSNR (v1 claimed +12–14 pp the other way —
-an artefact of flaw #2). JPEG Q90/Q70 and additive noise also favour DCT-QIM.
-
-**Mechanism**: with M=1 DP-QIM decodes the sign of the coefficient relative
-to a median that is ~0 for AC coefficients, so any attack that scales
-coefficients (blur, downscale, contrast) leaves the decision unchanged. QIM's
-fixed lattice is classically fragile to such valumetric scaling. Conversely,
-at matched PSNR QIM concentrates its distortion into a large lattice step,
-which buys margin against additive noise and requantization.
-
-**Revised claim**: DP-QIM trades additive-noise margin for statistical
-undetectability and scaling robustness. Undetectability alone does not confer
-removal resistance.
+These observations describe a small-sample trade-off. They do not establish
+statistical invisibility, resistance to strong adaptive removal, or
+state-of-the-art performance. The same photos were used during development;
+stronger independent validation remains necessary.

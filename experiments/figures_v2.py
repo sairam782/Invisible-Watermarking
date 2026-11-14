@@ -1,7 +1,7 @@
-"""Figures for the v2 paper (all from the leakage-free protocol).
+"""Figures for the corrected v3 paper (historical filenames retained).
 
 fig1_histograms_v2: DCT(3,3) coefficient histograms over all blocks of the
-    44 real crops — cover vs DCT-QIM stego vs DP-QIM stego, both methods at
+    43 real crops - cover vs DCT-QIM stego vs DP-QIM stego, both methods at
     the same position and matched PSNR, every block carrying payload.
 fig2_curves_v2:     bit accuracy vs PSNR for six attacks, both methods.
 fig3_detect_v2:     detector ROC-AUC vs payload density with 95% CIs.
@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 REPO = Path(__file__).resolve().parent.parent
-V2 = REPO / "results" / "v2"
+V2 = REPO / "results" / "v3"
 FIGS = REPO / "paper" / "figures"
 
 DP_COLOR, QIM_COLOR = "#C0392B", "#555555"
@@ -32,7 +32,7 @@ def _save(fig, name):
 
 
 def fig1():
-    from experiments.detect_v2 import UV, _stego_sets
+    from experiments.detect_v3 import UV, _stego_sets
     from src.protocol import block_dct, real_crops
     crops = real_crops()
     payload = 1024
@@ -44,7 +44,7 @@ def fig1():
     fig, axes = plt.subplots(1, 3, figsize=(10, 2.8), sharey=True)
     for ax, data, title, col in [
         (axes[0], cover, "Cover (natural)", "#2E86C1"),
-        (axes[1], q_c, f"DCT-QIM, $\\Delta$={delta} ({q_psnr:.1f} dB)", QIM_COLOR),
+        (axes[1], q_c, f"QIM, train-calibrated ({q_psnr:.1f} dB)", QIM_COLOR),
         (axes[2], d_c, f"DP-QIM, $\\epsilon$=2 ({dp_psnr:.1f} dB)", DP_COLOR),
     ]:
         ax.hist(np.clip(data, -60, 60), bins=bins, density=True, color=col)
@@ -61,10 +61,10 @@ def fig2(path=V2 / "curves_uv33_p64.json"):
     recs = json.loads(path.read_text())["records"]
     panels = [("gauss_blur_1.0", "Gaussian blur r=1"),
               ("resize_0.5", "Downscale 0.5x"),
-              ("contrast_0.5", "Contrast x0.5 (pure scaling)"),
+              ("contrast_0.5", "Contrast x0.5"),
               ("jpeg_q70", "JPEG Q70"),
               ("gauss_noise_.03", "Gaussian noise $\\sigma$=.03"),
-              ("unmarker_t1.5_j1.0", "UnMarker-style removal")]
+              ("unmarker_t1.5_j1.0", "Histogram-jitter removal")]
     fig, axes = plt.subplots(2, 3, figsize=(10, 5.2), sharey=True)
     for ax, (metric, title) in zip(axes.flat, panels):
         for method, col, mk in (("DCT-QIM", QIM_COLOR, "s"), ("DP-QIM", DP_COLOR, "o")):
@@ -102,7 +102,7 @@ def fig3(path=V2 / "detect.json"):
     x = np.arange(len(payloads))
     fig, axes = plt.subplots(1, 2, figsize=(8, 2.9), sharey=True)
     for ax, det, title in ((axes[0], "learned", "Learned histogram detector"),
-                           (axes[1], "peak", "UnMarker peak statistic")):
+                           (axes[1], "peak", "Histogram peak statistic")):
         for k, (tag, col, lab) in enumerate((("qim", QIM_COLOR, "DCT-QIM"),
                                               ("dp", DP_COLOR, "DP-QIM"))):
             vals = np.array([r[f"{tag}_auc_{det}"] for r in rows])
@@ -116,7 +116,7 @@ def fig3(path=V2 / "detect.json"):
         ax.set_title(title, fontsize=9)
         ax.set_ylim(0.3, 1.05)
         ax.tick_params(labelsize=7)
-    axes[0].set_ylabel("ROC-AUC (0.5 = undetectable)", fontsize=8)
+    axes[0].set_ylabel("Within-fold ROC-AUC (0.5 = chance)", fontsize=8)
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="upper center", ncol=2, fontsize=8, frameon=False)
     plt.tight_layout(rect=(0, 0, 1, 0.92))

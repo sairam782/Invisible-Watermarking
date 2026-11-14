@@ -1,6 +1,4 @@
-%% 1-page visual summary of the paper.
-%% Build: pdflatex handout.tex   (needs tables/*.tex and figures/*_v2.pdf)
-
+%% Corrected one-page summary, v3. Build with pdflatex handout.tex.
 \documentclass[10pt]{article}
 \usepackage[margin=0.5in,letterpaper]{geometry}
 \usepackage{graphicx}
@@ -12,55 +10,58 @@
 \titlespacing*{\section}{0pt}{4pt}{1pt}
 \pagestyle{empty}
 \setlength{\parindent}{0pt}
-\setlength{\parskip}{2pt}
-
+\setlength{\parskip}{3pt}
 \begin{document}
-
 \begin{center}
-{\LARGE \textbf{Distribution-Preserving QIM}}\\[2pt]
-{\large Trading noise margin for statistical undetectability and scaling robustness}\\[4pt]
-{\small \textbf{Abhishek Sairam Gaduputi} \,\textbar\, Department of Data Science, NJIT \,\textbar\,
-\texttt{ag2936@njit.edu}}\\
-{\small \href{https://github.com/sairam782/Invisible-Watermarking}{\texttt{github.com/sairam782/Invisible-Watermarking}}}
+{\LARGE\textbf{Distribution-Preserving QIM}}\\[2pt]
+{\large Histogram detectability and robustness trade-offs}\\[3pt]
+{\small Abhishek Sairam Gaduputi, Department of Data Science, NJIT}\\
+{\small\texttt{ag2936@njit.edu}}\\
+{\small\url{https://github.com/sairam782/Invisible-Watermarking}}
 \end{center}
 
-\section*{The problem}
-QIM watermarks snap DCT coefficients onto a lattice, so the coefficient
-histogram turns into isolated spikes. Natural images have no such spikes,
-which lets a detector, or a black-box removal attack such as UnMarker
-(IEEE S\&P 2025), find marked images without the key.
+\section*{Corrected result, not a security guarantee}
+DP-QIM replaces a mismatched DCT carrier with a sample from the target
+quantile cell instead of a lattice point. It reduces some histogram
+fingerprints but remains detectable. The previous near-undetectability
+claim is withdrawn.
 
-\section*{The idea: DP-QIM}
-Split the natural distribution of one DCT coefficient at its median into two
-equal-mass cells labelled 0 and 1. A coefficient already in the right cell is
-left alone (about half of them). Otherwise it is replaced by a \emph{real}
-coefficient value drawn from the other cell, away from the boundary. The
-marked histogram is then $\tfrac12 F + \tfrac12 F_\epsilon$, close to natural.
-Because the median of an AC coefficient is $0$, decoding is a sign test, so
-scaling the coefficient by any $s>0$ (blur, downscaling, contrast) cannot flip a bit.
+\section*{What the theory actually says}
+For ideal continuous equal-mass cells and independent uniform bits,
+$P_W=\frac12F+\frac14G_{0,\epsilon}+\frac14G_{1,\epsilon}$, where each
+$G_{i,\epsilon}$ is conditioned \emph{within its own safe cell}. Global
+conditioning is not equivalent in general. Finite pools, ties and RGB
+rounding prevent an exact implementation-level guarantee.
+A zero decision boundary is invariant to positive scalar scaling; this is
+not a theorem about image blur or resizing. QIM can decode correctly after
+large displacements because its label regions repeat periodically.
 
 \begin{center}
-\includegraphics[width=0.9\linewidth]{figures/fig1_histograms_v2.pdf}
+\includegraphics[width=0.85\linewidth]{figures/fig1_histograms_v2.pdf}
 \end{center}
 
-\section*{Results (44 real crops, 15 photos, same DCT position, matched PSNR, 95\% source-bootstrap CI)}
+\section*{Protocol and corrected measurements}
+43 crops from 14 distinct photos; exact source/crop hashes checked.
+The \texttt{cat}/\texttt{chelsea} alias is removed. Every detector component
+and QIM fidelity calibration uses the same outer training split.
+AUC is averaged within folds, not pooled across different classifiers.
+Intervals are conditional source bootstraps, not uncertainty over retraining.
+
 \begin{minipage}[t]{0.48\linewidth}
-\textbf{Detectability} (ROC-AUC, 0.5 = undetectable)\\[2pt]
+\textbf{Detectability} (0.5 = chance)\\[2pt]
 \resizebox{\linewidth}{!}{\input{tables/detect.tex}}
 \end{minipage}\hfill
 \begin{minipage}[t]{0.48\linewidth}
-\textbf{Robustness}: DP-QIM minus matched QIM (pp)\\[2pt]
+\textbf{Robustness} (matched-PSNR difference)\\[2pt]
 \resizebox{\linewidth}{!}{\input{tables/robustness.tex}}
 \end{minipage}
 
-\section*{Take-away}
-\textbf{Wins:} near-chance detectability; $+20$ to $+35$~pp under blur,
-downscaling and contrast reduction.
-\textbf{Costs:} $-14$ to $-28$~pp under JPEG and additive noise, and
-3 to 7~pp worse under an UnMarker-style removal attack. Hiding the watermark's
-statistics is a real lever, but it does not by itself defeat removal.
-The released protocol (source-grouped CV, matched PSNR, independent attacker,
-bootstrap CIs) also documents five evaluation pitfalls that changed our own
-conclusions.
-
+\section*{Interpretation and limits}
+Learned-detector AUC for DP-QIM rises from 0.65 to 0.84 and 0.96 as
+payload increases. At 64 bits, blur/downscale/half-contrast gains are
+34.8/33.4/20.8 pp, while JPEG 90/JPEG 70/noise cost 15.8/28.6/14.1 pp.
+Histogram-jitter losses are 2.7 to 7.0 pp; this is \emph{not} published UnMarker.
+The data were used during development. Independent benchmarks, stronger
+detectors and gain-invariant QIM baselines remain necessary. Read the full
+paper and \texttt{CORRECTIONS.md}; this summary is not publication validation.
 \end{document}

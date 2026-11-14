@@ -1,4 +1,4 @@
-"""Evaluation protocol v2: leakage-free, reproducible, statistically honest.
+"""Evaluation protocol v3: content-audited sources and explicit outer folds.
 
 Fixes the v1 flaws found in review:
   * payload seeds come from crc32, not Python's per-process-salted hash();
@@ -11,6 +11,9 @@ Fixes the v1 flaws found in review:
 from __future__ import annotations
 
 import os
+import hashlib
+import importlib.metadata
+import platform
 import zlib
 from dataclasses import dataclass
 
@@ -21,11 +24,12 @@ from .natural_cdf import BLOCK
 from .utils import block_view, rgb_to_ycbcr
 
 CROP = 256
+PROTOCOL_VERSION = 3
 
 # Real photographs bundled with scikit-image / matplotlib. Synthetic or
 # non-photographic images (checkerboard, text, logos, phantoms) are excluded.
 _SKIMAGE_SOURCES = [
-    "astronaut", "chelsea", "coffee", "cat", "rocket",           # color photos
+    "astronaut", "chelsea", "coffee", "rocket",  # cat is an alias of chelsea
     "camera", "moon", "coins", "clock",                           # gray photos
     "brick", "grass", "gravel",                                   # gray textures
     "hubble_deep_field", "immunohistochemistry",                  # scientific photos
@@ -46,26 +50,75 @@ def _to_rgb_uint8(arr: np.ndarray) -> np.ndarray:
     return arr[..., :3]
 
 
+def image_hash(image: np.ndarray) -> str:
+    a = np.ascontiguousarray(image)
+    return hashlib.sha256(str((a.shape, a.dtype.str)).encode() + a.tobytes()).hexdigest()
+
+
+def deduplicate_sources(sources):
+    """Keep the lexicographically first name for each identical source image."""
+    seen, unique, aliases = {}, {}, {}
+    for name, image in sorted(sources.items()):
+        digest = image_hash(image)
+        if digest in seen:
+            aliases[name] = seen[digest]
+        else:
+            seen[digest] = name
+            unique[name] = image
+    return unique, aliases
+
+
+def validate_crops(crops):
+    if not crops:
+        raise ValueError("No crops available")
+    names, hashes = set(), set()
+    for crop in crops:
+        digest = image_hash(crop.image)
+        if crop.name in names or digest in hashes:
+            raise ValueError("Duplicate crop identity or content: " + crop.name)
+        names.add(crop.name)
+        hashes.add(digest)
+
+
+def assert_disjoint(train, test):
+    if ({c.source for c in train} & {c.source for c in test}
+            or {image_hash(c.image) for c in train} & {image_hash(c.image) for c in test}):
+        raise ValueError("Source/content leakage across outer split")
+
+
+def provenance(crops):
+    validate_crops(crops)
+    return {
+        "protocol_version": PROTOCOL_VERSION,
+        "python": platform.python_version(),
+        "packages": {p: importlib.metadata.version(p) for p in
+                     ("numpy", "scipy", "Pillow", "scikit-image", "scikit-learn", "matplotlib")},
+        "known_excluded_aliases": {"cat": "chelsea"},
+        "crop_count": len(crops), "source_count": len({c.source for c in crops}),
+        "crops": [{"name": c.name, "source": c.source, "sha256": image_hash(c.image)} for c in crops],
+        "folds": [{"train_sources": sorted({c.source for c in tr}),
+                   "test_sources": sorted({c.source for c in te})} for tr, te in source_folds(crops)],
+    }
+
+
 def load_real_sources() -> dict[str, np.ndarray]:
     from skimage import data as skd
     out: dict[str, np.ndarray] = {}
     for name in _SKIMAGE_SOURCES:
-        fn = getattr(skd, name, None)
-        if fn is None:
-            continue
+        fn = getattr(skd, name)
         try:
             out[name] = _to_rgb_uint8(fn())
-        except Exception:
-            continue
+        except Exception as exc:
+            raise RuntimeError("Required source unavailable: " + name) from exc
     try:
         import matplotlib
         from PIL import Image
         p = os.path.join(os.path.dirname(matplotlib.__file__), "mpl-data",
                          "sample_data", "grace_hopper.jpg")
         out["grace_hopper"] = np.asarray(Image.open(p).convert("RGB"), dtype=np.uint8)
-    except Exception:
-        pass
-    return out
+    except Exception as exc:
+        raise RuntimeError("Required source unavailable: grace_hopper") from exc
+    return deduplicate_sources(out)[0]
 
 
 @dataclass(frozen=True)
@@ -93,19 +146,25 @@ def real_crops(size: int = CROP, max_per_source: int = 4) -> list[Crop]:
         for k, c in enumerate(sorted({int(round(p)) for p in pick})):
             i, j = cells[c]
             crops.append(Crop(source, k, img[i * size:(i + 1) * size, j * size:(j + 1) * size]))
+    validate_crops(crops)
     return crops
 
 
 def source_folds(crops: list[Crop], k: int = 5, seed: int = 0):
     """Yield (train, test) crop lists with disjoint sources."""
+    validate_crops(crops)
     sources = sorted({c.source for c in crops})
+    if not 2 <= k <= len(sources):
+        raise ValueError("Need at least k distinct sources and k >= 2")
     rng = np.random.default_rng(seed)
     order = [sources[i] for i in rng.permutation(len(sources))]
     groups = [order[i::k] for i in range(k)]
     for g in groups:
         test_src = set(g)
-        yield ([c for c in crops if c.source not in test_src],
-               [c for c in crops if c.source in test_src])
+        train = [c for c in crops if c.source not in test_src]
+        test = [c for c in crops if c.source in test_src]
+        assert_disjoint(train, test)
+        yield train, test
 
 
 def _dct2(x):

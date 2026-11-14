@@ -1,41 +1,27 @@
-Subject: Request for arXiv endorsement (cs.CR) — watermarking preprint
+Subject: Request for arXiv endorsement (cs.CR): corrected watermarking draft
 
 Dear Dr. <NAME>,
 
-I am a graduate student in the Department of Data Science at NJIT and have
-written a short paper on invisible image watermarking. I would like to
-post it on arXiv (primary cs.CR, cross-list cs.CV) and, as a first-time submitter, need an
-endorsement from an existing author in that category. Endorsing only
-confirms the paper is appropriate for the category; it does not make you a
-co-author or imply review.
+I am Abhishek Sairam Gaduputi at NJIT and am preparing a small-sample study of
+invisible image watermarking. If the paper fits the relevant arXiv category
+and you are eligible to endorse it, would you consider my request?
 
-If you are willing, please go to https://arxiv.org/auth/endorse and enter
-my endorsement code:
+Title: Distribution-Preserving QIM: Histogram Detectability and Robustness Trade-offs in Invisible Watermarking
 
-    <YOUR ENDORSEMENT CODE>
+The corrected study uses 43 crops from 14 distinct photos. DP-QIM is detectable:
+learned-histogram AUC is 0.65 at 64 bits versus 0.95 for QIM, rising to 0.96
+for DP-QIM at full payload. It improves several processing-robustness measures
+but loses accuracy under JPEG, additive noise and a simplified jitter attack.
+The draft explicitly documents its corrected protocol and limited evidence.
 
-Paper (5 pages, 2 figures, 3 tables):
+Draft/code: https://github.com/sairam782/Invisible-Watermarking
+Endorsement details: <COPY THE CURRENT ARXIV ENDORSEMENT REQUEST HERE>
 
-  Title: Distribution-Preserving QIM: Trading Noise Margin for Statistical
-         Undetectability and Scaling Robustness in Invisible Watermarking
+I would appreciate your independent assessment before considering submission.
 
-  Summary: QIM watermarks leave a lattice fingerprint in DCT coefficient
-  histograms that removal attacks such as UnMarker exploit. We study a QIM
-  variant that keeps the coefficient distribution natural and compare it
-  with classical QIM at matched PSNR on real photographs, with
-  source-grouped cross-validation and bootstrap confidence intervals. It is
-  close to undetectable (learned-detector AUC 0.52 vs 0.90 at 64 bits) and
-  gains 20-35 percentage points under blur, downscaling and contrast
-  scaling, but loses 14-28 points under JPEG and noise and gives no
-  advantage against UnMarker-style removal.
-
-  Preprint: <TECHRXIV DOI, once posted>
-  Code: https://github.com/sairam782/Invisible-Watermarking
-
-I am happy to send the PDF if you would like to look at it first.
-
-Thank you for your time,
-
+Thank you,
 Abhishek Sairam Gaduputi
 Department of Data Science, New Jersey Institute of Technology
 ag2936@njit.edu
+
+DRAFT ONLY: verify the recipient, category and endorsement requirements before sending.

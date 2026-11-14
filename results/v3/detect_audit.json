@@ -1,0 +1,1186 @@
+{
+  "provenance": {
+    "protocol_version": 3,
+    "python": "3.12.14",
+    "packages": {
+      "numpy": "2.5.4",
+      "scipy": "1.18.1",
+      "Pillow": "13.0.0",
+      "scikit-image": "0.26.0",
+      "scikit-learn": "1.9.1",
+      "matplotlib": "3.11.2"
+    },
+    "known_excluded_aliases": {
+      "cat": "chelsea"
+    },
+    "crop_count": 43,
+    "source_count": 14,
+    "crops": [
+      {
+        "name": "astronaut#0",
+        "source": "astronaut",
+        "sha256": "3b71825e12a92ac7d78d4d3fbd0c87831cccec7bb4f27451251655ac335050fe"
+      },
+      {
+        "name": "astronaut#1",
+        "source": "astronaut",
+        "sha256": "155597e57464c951bdcb9d70d6fe0c59e5ad448e2ba68110a3bd34bcbf1af98b"
+      },
+      {
+        "name": "astronaut#2",
+        "source": "astronaut",
+        "sha256": "e7b082cef5351c9c3a15a4a975e65fdacebbfa2edef2912f87fd73c62cd1d18e"
+      },
+      {
+        "name": "astronaut#3",
+        "source": "astronaut",
+        "sha256": "809d2dc5e4cfa4b9215621aa93a8e81472f9b59879db1585dd53f9bd768e209c"
+      },
+      {
+        "name": "brick#0",
+        "source": "brick",
+        "sha256": "819d6ef70ecc3c28f4b4dda98e3dccaf6a42b65f7e0f45e194a87f7620e98dff"
+      },
+      {
+        "name": "brick#1",
+        "source": "brick",
+        "sha256": "1c0a9afb48cd239f71af40d0614f183eca0addaf9d733530de823e125b24e38c"
+      },
+      {
+        "name": "brick#2",
+        "source": "brick",
+        "sha256": "705f14f7678c7df8ae7faf6860f9986db3a429856cb3601dcf836dd043893af3"
+      },
+      {
+        "name": "brick#3",
+        "source": "brick",
+        "sha256": "d852b3570b5ad2a9be61ee140bf2e8794db3de3283169ae8f99e595e60b2a135"
+      },
+      {
+        "name": "camera#0",
+        "source": "camera",
+        "sha256": "2306d4ca3dea86ad12884295256bb8c513aa82b9ed19e6598975e5e07a4749d1"
+      },
+      {
+        "name": "camera#1",
+        "source": "camera",
+        "sha256": "d59d219072652f73fb92752aa4f38c73df2db3e1adc1915d4b3683ba0a60685c"
+      },
+      {
+        "name": "camera#2",
+        "source": "camera",
+        "sha256": "9508291f11b3b81b99f711d3cb129ad411ebcc6a3a75dfceb24c3a0076a6fa7e"
+      },
+      {
+        "name": "camera#3",
+        "source": "camera",
+        "sha256": "cd414dc4d55754746fc703816a01f3d83bafb00817dd68b2fd026c96546e7ce4"
+      },
+      {
+        "name": "chelsea#0",
+        "source": "chelsea",
+        "sha256": "ba46b9138fbc79ef0d62f7683a5bd1f9855c3ee90bafdb90e34988a5d912025c"
+      },
+      {
+        "name": "clock#0",
+        "source": "clock",
+        "sha256": "09b124e6aa5a3a6d51733f20bdaddab49cddf98984cddac75a1454e8000e16a2"
+      },
+      {
+        "name": "coffee#0",
+        "source": "coffee",
+        "sha256": "4e6c770beea1be87afcea8e8a0e3d5b9fdcc7c3543c89701c534205ac10ba3a3"
+      },
+      {
+        "name": "coffee#1",
+        "source": "coffee",
+        "sha256": "79a6cf2d72ad5c84e30626a54c47bf3f66e3a28e41044067a5d9e8d4faab515a"
+      },
+      {
+        "name": "coins#0",
+        "source": "coins",
+        "sha256": "0831a9dd5906e704e3f8b413fc707912525c40364778a4d7066c2084b8b24bb9"
+      },
+      {
+        "name": "grace_hopper#0",
+        "source": "grace_hopper",
+        "sha256": "7bfe3526263a872e507614356af8b356177e0f2ca9f284aa196bf929bdb59710"
+      },
+      {
+        "name": "grace_hopper#1",
+        "source": "grace_hopper",
+        "sha256": "1b5403b3d3c3573d3d27b84bca6548bca9b66c4c485f12f66f2cda7d9f01be88"
+      },
+      {
+        "name": "grace_hopper#2",
+        "source": "grace_hopper",
+        "sha256": "c9587306a4a98b33d3f1e503a6f4b30c3256b0f15653c64675e5072df904cf91"
+      },
+      {
+        "name": "grace_hopper#3",
+        "source": "grace_hopper",
+        "sha256": "1b974946e25c830b9ababa20252ae310e15c659c0ccf6908d7c6ca4b3e03bb34"
+      },
+      {
+        "name": "grass#0",
+        "source": "grass",
+        "sha256": "bfb766751598a525f68abfe03dd78f9b0d113f798726252d36c2933012cc6b98"
+      },
+      {
+        "name": "grass#1",
+        "source": "grass",
+        "sha256": "15083295142af1b827c9ee3034bc1c58e95e26491344cd7c9091c61d011044c6"
+      },
+      {
+        "name": "grass#2",
+        "source": "grass",
+        "sha256": "9fd67a780bb5344844bcb7a1a43a5a2b1572c9b20ad2e77deb5b38f4be46bbcb"
+      },
+      {
+        "name": "grass#3",
+        "source": "grass",
+        "sha256": "1378f27f7ea312aecb7c0fcaf799cfe88074654c2cdae092ec54cf26d77dd638"
+      },
+      {
+        "name": "gravel#0",
+        "source": "gravel",
+        "sha256": "ca1e70011b02d834e5c6e669ce0ff7b849226b0d9282f68ea47e16f2b5fa0e17"
+      },
+      {
+        "name": "gravel#1",
+        "source": "gravel",
+        "sha256": "89083da118ad388f6bdbf86799cfe5e8f03109f3f3992203db1005839e1da255"
+      },
+      {
+        "name": "gravel#2",
+        "source": "gravel",
+        "sha256": "0c18f24ee6f79b790a6c8c21884d18bc307d2296cb33fcb6180bc653eff95d26"
+      },
+      {
+        "name": "gravel#3",
+        "source": "gravel",
+        "sha256": "0c5cc9bfa123323d0ff956fdd2c3092329ebf5a12e3addef8f205137b57470d2"
+      },
+      {
+        "name": "hubble_deep_field#0",
+        "source": "hubble_deep_field",
+        "sha256": "806c77f26a9ed727d5f8ce68f66f317dfb6e2271f326c16ac42a7950477dbcc9"
+      },
+      {
+        "name": "hubble_deep_field#1",
+        "source": "hubble_deep_field",
+        "sha256": "09bbe40ee0a250bedcd078e32be7d6670d4d4988a682ecd730f089675ebd7376"
+      },
+      {
+        "name": "hubble_deep_field#2",
+        "source": "hubble_deep_field",
+        "sha256": "f493e609a5d7298cdc3200879d7702a1704c99befd782df31f0d3157f368bad9"
+      },
+      {
+        "name": "hubble_deep_field#3",
+        "source": "hubble_deep_field",
+        "sha256": "7bbde192747e5fd17eb89db8fc24a911a6c49735fcd97de0ce4ac02b9f30c68c"
+      },
+      {
+        "name": "immunohistochemistry#0",
+        "source": "immunohistochemistry",
+        "sha256": "ebd6cd61aa2040b88e645c569b16ddc5239c5821a6dd36385e91dd9db85a1b00"
+      },
+      {
+        "name": "immunohistochemistry#1",
+        "source": "immunohistochemistry",
+        "sha256": "b26a550e87b98b566ca11e36fec91432c6be8a7eda9683c6f7bcd5e690d19339"
+      },
+      {
+        "name": "immunohistochemistry#2",
+        "source": "immunohistochemistry",
+        "sha256": "382b3d505a1e2ae79f2a8c954dc8b0d119125eea98f38d7d6c9fa0b7230b3af5"
+      },
+      {
+        "name": "immunohistochemistry#3",
+        "source": "immunohistochemistry",
+        "sha256": "4a9713702e618eac0080c7a7facd7e7ac3747dcce43ccf144899a16ae978b5f3"
+      },
+      {
+        "name": "moon#0",
+        "source": "moon",
+        "sha256": "20f4f3e01acac182ed13f7ae3120b2bfdee73c9783722fe18b6a53f61e653442"
+      },
+      {
+        "name": "moon#1",
+        "source": "moon",
+        "sha256": "49d2c29d22c87d90fca69e7be2ac4493602cfb76d96c2f978ceaa7610799e60b"
+      },
+      {
+        "name": "moon#2",
+        "source": "moon",
+        "sha256": "4b8bfd4bd669c3499b3ca4b34b5b549ca019bd625f16e48d00964e5575a349b1"
+      },
+      {
+        "name": "moon#3",
+        "source": "moon",
+        "sha256": "6a8c84d7b22ca1228ca4861580c71932f16cb3dc4d45efe1cc002e5df536121a"
+      },
+      {
+        "name": "rocket#0",
+        "source": "rocket",
+        "sha256": "443486d973f09516dad5eb91aae245b8db1eddac4a537d6b1bd05a040e118012"
+      },
+      {
+        "name": "rocket#1",
+        "source": "rocket",
+        "sha256": "c85d96e82f60ce4d83e00d5b24702229fb89a13a6c5629b5778eac85e3b007fe"
+      }
+    ],
+    "folds": [
+      {
+        "train_sources": [
+          "astronaut",
+          "brick",
+          "camera",
+          "clock",
+          "coffee",
+          "coins",
+          "grass",
+          "hubble_deep_field",
+          "immunohistochemistry",
+          "moon",
+          "rocket"
+        ],
+        "test_sources": [
+          "chelsea",
+          "grace_hopper",
+          "gravel"
+        ]
+      },
+      {
+        "train_sources": [
+          "astronaut",
+          "brick",
+          "chelsea",
+          "clock",
+          "coffee",
+          "coins",
+          "grace_hopper",
+          "grass",
+          "gravel",
+          "hubble_deep_field",
+          "immunohistochemistry"
+        ],
+        "test_sources": [
+          "camera",
+          "moon",
+          "rocket"
+        ]
+      },
+      {
+        "train_sources": [
+          "brick",
+          "camera",
+          "chelsea",
+          "clock",
+          "coffee",
+          "coins",
+          "grace_hopper",
+          "gravel",
+          "immunohistochemistry",
+          "moon",
+          "rocket"
+        ],
+        "test_sources": [
+          "astronaut",
+          "grass",
+          "hubble_deep_field"
+        ]
+      },
+      {
+        "train_sources": [
+          "astronaut",
+          "camera",
+          "chelsea",
+          "clock",
+          "coins",
+          "grace_hopper",
+          "grass",
+          "gravel",
+          "hubble_deep_field",
+          "moon",
+          "rocket"
+        ],
+        "test_sources": [
+          "brick",
+          "coffee",
+          "immunohistochemistry"
+        ]
+      },
+      {
+        "train_sources": [
+          "astronaut",
+          "brick",
+          "camera",
+          "chelsea",
+          "coffee",
+          "grace_hopper",
+          "grass",
+          "gravel",
+          "hubble_deep_field",
+          "immunohistochemistry",
+          "moon",
+          "rocket"
+        ],
+        "test_sources": [
+          "clock",
+          "coins"
+        ]
+      }
+    ]
+  },
+  "settings": [
+    {
+      "payload": 64,
+      "margin": 1.0,
+      "folds": [
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "clock",
+            "coffee",
+            "coins",
+            "grass",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 52,
+          "dp_train_psnr": 54.02320784236833,
+          "qim_train_psnr": 54.03764597390766,
+          "fold": 0,
+          "test_sources": [
+            "chelsea",
+            "grace_hopper",
+            "gravel"
+          ],
+          "dp_test_psnr": 51.794271205927956,
+          "qim_test_psnr": 54.22142937269711
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 64,
+          "dp_train_psnr": 51.66883274106556,
+          "qim_train_psnr": 52.39409202438384,
+          "fold": 1,
+          "test_sources": [
+            "camera",
+            "moon",
+            "rocket"
+          ],
+          "dp_test_psnr": 53.48833799066405,
+          "qim_test_psnr": 51.61789315239582
+        },
+        {
+          "train_sources": [
+            "brick",
+            "camera",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "gravel",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 46,
+          "dp_train_psnr": 54.685330916595504,
+          "qim_train_psnr": 54.77559726594481,
+          "fold": 2,
+          "test_sources": [
+            "astronaut",
+            "grass",
+            "hubble_deep_field"
+          ],
+          "dp_test_psnr": 53.020681863408406,
+          "qim_test_psnr": 55.388244481098326
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "camera",
+            "chelsea",
+            "clock",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 58,
+          "dp_train_psnr": 53.05349672210476,
+          "qim_train_psnr": 53.009942330484726,
+          "fold": 3,
+          "test_sources": [
+            "brick",
+            "coffee",
+            "immunohistochemistry"
+          ],
+          "dp_test_psnr": 53.88675871586355,
+          "qim_test_psnr": 52.93742739979092
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "chelsea",
+            "coffee",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 46,
+          "dp_train_psnr": 55.20846330389484,
+          "qim_train_psnr": 54.93902504049969,
+          "fold": 4,
+          "test_sources": [
+            "clock",
+            "coins"
+          ],
+          "dp_test_psnr": 57.243558469416456,
+          "qim_test_psnr": 55.101211178490985
+        }
+      ]
+    },
+    {
+      "payload": 64,
+      "margin": 2.0,
+      "folds": [
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "clock",
+            "coffee",
+            "coins",
+            "grass",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 46,
+          "dp_train_psnr": 54.83102329901367,
+          "qim_train_psnr": 54.89982012088734,
+          "fold": 0,
+          "test_sources": [
+            "chelsea",
+            "grace_hopper",
+            "gravel"
+          ],
+          "dp_test_psnr": 52.51092463291408,
+          "qim_test_psnr": 55.12317387858881
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 62,
+          "dp_train_psnr": 52.624287742661245,
+          "qim_train_psnr": 52.757690006185975,
+          "fold": 1,
+          "test_sources": [
+            "camera",
+            "moon",
+            "rocket"
+          ],
+          "dp_test_psnr": 55.05668929549061,
+          "qim_test_psnr": 52.01768083693263
+        },
+        {
+          "train_sources": [
+            "brick",
+            "camera",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "gravel",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 48,
+          "dp_train_psnr": 54.44396823277776,
+          "qim_train_psnr": 54.4022420666051,
+          "fold": 2,
+          "test_sources": [
+            "astronaut",
+            "grass",
+            "hubble_deep_field"
+          ],
+          "dp_test_psnr": 52.608396473114745,
+          "qim_test_psnr": 55.005319633356486
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "camera",
+            "chelsea",
+            "clock",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 64,
+          "dp_train_psnr": 52.27907556912943,
+          "qim_train_psnr": 52.2154157286737,
+          "fold": 3,
+          "test_sources": [
+            "brick",
+            "coffee",
+            "immunohistochemistry"
+          ],
+          "dp_test_psnr": 52.83235522024337,
+          "qim_test_psnr": 52.20752492823929
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "chelsea",
+            "coffee",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 52,
+          "dp_train_psnr": 54.08515516499473,
+          "qim_train_psnr": 54.05606925788969,
+          "fold": 4,
+          "test_sources": [
+            "clock",
+            "coins"
+          ],
+          "dp_test_psnr": 55.840517039326976,
+          "qim_test_psnr": 54.48699394682835
+        }
+      ]
+    },
+    {
+      "payload": 256,
+      "margin": 1.0,
+      "folds": [
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "clock",
+            "coffee",
+            "coins",
+            "grass",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 54,
+          "dp_train_psnr": 47.83870855262297,
+          "qim_train_psnr": 47.68390518221004,
+          "fold": 0,
+          "test_sources": [
+            "chelsea",
+            "grace_hopper",
+            "gravel"
+          ],
+          "dp_test_psnr": 45.98230096407042,
+          "qim_test_psnr": 47.90443812784459
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 64,
+          "dp_train_psnr": 46.38948730182495,
+          "qim_train_psnr": 46.35229808679038,
+          "fold": 1,
+          "test_sources": [
+            "camera",
+            "moon",
+            "rocket"
+          ],
+          "dp_test_psnr": 48.10914875796338,
+          "qim_test_psnr": 45.80655370914654
+        },
+        {
+          "train_sources": [
+            "brick",
+            "camera",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "gravel",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 48,
+          "dp_train_psnr": 48.288858360594205,
+          "qim_train_psnr": 48.37617610505094,
+          "fold": 2,
+          "test_sources": [
+            "astronaut",
+            "grass",
+            "hubble_deep_field"
+          ],
+          "dp_test_psnr": 46.68668319643759,
+          "qim_test_psnr": 48.98168347800038
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "camera",
+            "chelsea",
+            "clock",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 58,
+          "dp_train_psnr": 47.129063952121,
+          "qim_train_psnr": 47.031875964597525,
+          "fold": 3,
+          "test_sources": [
+            "brick",
+            "coffee",
+            "immunohistochemistry"
+          ],
+          "dp_test_psnr": 47.92062587633727,
+          "qim_test_psnr": 46.84991234806612
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "chelsea",
+            "coffee",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 56,
+          "dp_train_psnr": 47.41052566136001,
+          "qim_train_psnr": 47.26279012505204,
+          "fold": 4,
+          "test_sources": [
+            "clock",
+            "coins"
+          ],
+          "dp_test_psnr": 48.27047704171626,
+          "qim_test_psnr": 46.7375596808959
+        }
+      ]
+    },
+    {
+      "payload": 256,
+      "margin": 2.0,
+      "folds": [
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "clock",
+            "coffee",
+            "coins",
+            "grass",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 50,
+          "dp_train_psnr": 48.17836234689289,
+          "qim_train_psnr": 48.2512406869969,
+          "fold": 0,
+          "test_sources": [
+            "chelsea",
+            "grace_hopper",
+            "gravel"
+          ],
+          "dp_test_psnr": 46.46911981485208,
+          "qim_test_psnr": 48.48418940854678
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 64,
+          "dp_train_psnr": 46.33097814802804,
+          "qim_train_psnr": 46.35229808679038,
+          "fold": 1,
+          "test_sources": [
+            "camera",
+            "moon",
+            "rocket"
+          ],
+          "dp_test_psnr": 48.24853677115042,
+          "qim_test_psnr": 45.80655370914654
+        },
+        {
+          "train_sources": [
+            "brick",
+            "camera",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "gravel",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 54,
+          "dp_train_psnr": 47.72795203968888,
+          "qim_train_psnr": 47.59824257380563,
+          "fold": 2,
+          "test_sources": [
+            "astronaut",
+            "grass",
+            "hubble_deep_field"
+          ],
+          "dp_test_psnr": 45.91202315170159,
+          "qim_test_psnr": 48.07059996314735
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "camera",
+            "chelsea",
+            "clock",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 64,
+          "dp_train_psnr": 45.99525488748106,
+          "qim_train_psnr": 46.253066891608604,
+          "fold": 3,
+          "test_sources": [
+            "brick",
+            "coffee",
+            "immunohistochemistry"
+          ],
+          "dp_test_psnr": 46.969683264576965,
+          "qim_test_psnr": 46.134016653246384
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "chelsea",
+            "coffee",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 56,
+          "dp_train_psnr": 47.194957693668286,
+          "qim_train_psnr": 47.26279012505204,
+          "fold": 4,
+          "test_sources": [
+            "clock",
+            "coins"
+          ],
+          "dp_test_psnr": 48.582631166413634,
+          "qim_test_psnr": 46.7375596808959
+        }
+      ]
+    },
+    {
+      "payload": 1024,
+      "margin": 1.0,
+      "folds": [
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "clock",
+            "coffee",
+            "coins",
+            "grass",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 54,
+          "dp_train_psnr": 41.62296981324956,
+          "qim_train_psnr": 41.66526276392143,
+          "fold": 0,
+          "test_sources": [
+            "chelsea",
+            "grace_hopper",
+            "gravel"
+          ],
+          "dp_test_psnr": 39.94580441062893,
+          "qim_test_psnr": 41.955344956995816
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 62,
+          "dp_train_psnr": 40.546070659769825,
+          "qim_train_psnr": 40.70433784196391,
+          "fold": 1,
+          "test_sources": [
+            "camera",
+            "moon",
+            "rocket"
+          ],
+          "dp_test_psnr": 42.241312973112414,
+          "qim_test_psnr": 40.151472851330794
+        },
+        {
+          "train_sources": [
+            "brick",
+            "camera",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "gravel",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 50,
+          "dp_train_psnr": 42.1491752999447,
+          "qim_train_psnr": 42.19553893494266,
+          "fold": 2,
+          "test_sources": [
+            "astronaut",
+            "grass",
+            "hubble_deep_field"
+          ],
+          "dp_test_psnr": 40.57706920869527,
+          "qim_test_psnr": 42.611799610997885
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "camera",
+            "chelsea",
+            "clock",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 58,
+          "dp_train_psnr": 41.1242337803841,
+          "qim_train_psnr": 41.01679659976832,
+          "fold": 3,
+          "test_sources": [
+            "brick",
+            "coffee",
+            "immunohistochemistry"
+          ],
+          "dp_test_psnr": 42.10537900698516,
+          "qim_test_psnr": 40.900248327160696
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "chelsea",
+            "coffee",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 56,
+          "dp_train_psnr": 41.269934882234175,
+          "qim_train_psnr": 41.262201809644424,
+          "fold": 4,
+          "test_sources": [
+            "clock",
+            "coins"
+          ],
+          "dp_test_psnr": 42.30715678535914,
+          "qim_test_psnr": 40.733868457461305
+        }
+      ]
+    },
+    {
+      "payload": 1024,
+      "margin": 2.0,
+      "folds": [
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "clock",
+            "coffee",
+            "coins",
+            "grass",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 54,
+          "dp_train_psnr": 41.82667286103873,
+          "qim_train_psnr": 41.66526276392143,
+          "fold": 0,
+          "test_sources": [
+            "chelsea",
+            "grace_hopper",
+            "gravel"
+          ],
+          "dp_test_psnr": 40.164395966435556,
+          "qim_test_psnr": 41.955344956995816
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 64,
+          "dp_train_psnr": 40.22870650790995,
+          "qim_train_psnr": 40.36392791159107,
+          "fold": 1,
+          "test_sources": [
+            "camera",
+            "moon",
+            "rocket"
+          ],
+          "dp_test_psnr": 41.97393511498096,
+          "qim_test_psnr": 39.750989848225366
+        },
+        {
+          "train_sources": [
+            "brick",
+            "camera",
+            "chelsea",
+            "clock",
+            "coffee",
+            "coins",
+            "grace_hopper",
+            "gravel",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 52,
+          "dp_train_psnr": 41.99164740801471,
+          "qim_train_psnr": 41.96323212693838,
+          "fold": 2,
+          "test_sources": [
+            "astronaut",
+            "grass",
+            "hubble_deep_field"
+          ],
+          "dp_test_psnr": 40.411575995256435,
+          "qim_test_psnr": 42.32156785090853
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "camera",
+            "chelsea",
+            "clock",
+            "coins",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 64,
+          "dp_train_psnr": 40.074387597619314,
+          "qim_train_psnr": 40.23708832670615,
+          "fold": 3,
+          "test_sources": [
+            "brick",
+            "coffee",
+            "immunohistochemistry"
+          ],
+          "dp_test_psnr": 41.011259094542616,
+          "qim_test_psnr": 40.16956047834559
+        },
+        {
+          "train_sources": [
+            "astronaut",
+            "brick",
+            "camera",
+            "chelsea",
+            "coffee",
+            "grace_hopper",
+            "grass",
+            "gravel",
+            "hubble_deep_field",
+            "immunohistochemistry",
+            "moon",
+            "rocket"
+          ],
+          "cdf_boundary": 0.0,
+          "qim_delta": 56,
+          "dp_train_psnr": 41.322266565571994,
+          "qim_train_psnr": 41.262201809644424,
+          "fold": 4,
+          "test_sources": [
+            "clock",
+            "coins"
+          ],
+          "dp_test_psnr": 42.478199151691044,
+          "qim_test_psnr": 40.733868457461305
+        }
+      ]
+    }
+  ]
+}

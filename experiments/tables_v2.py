@@ -1,4 +1,4 @@
-"""Emit the paper's LaTeX tables directly from results/v2 (no hand-copied numbers)."""
+"""Emit corrected paper tables from results/v3 (historical module name)."""
 from __future__ import annotations
 
 import json
@@ -7,7 +7,7 @@ from pathlib import Path
 from experiments.eval_v2 import matched_gain
 
 REPO = Path(__file__).resolve().parent.parent
-V2 = REPO / "results" / "v2"
+V2 = REPO / "results" / "v3"
 TABLES = REPO / "paper" / "tables"
 
 MAIN_MARGIN = 2.0
@@ -19,8 +19,8 @@ ROWS = [("identity", "No attack"),
         ("resize_0.5", "Downscale $0.5\\times$"),
         ("contrast_0.5", "Contrast $\\times 0.5$"),
         ("contrast_0.8", "Contrast $\\times 0.8$"),
-        ("unmarker_t2.0_j0.5", "UnMarker-style ($\\tau{=}2$, $j{=}0.5$)"),
-        ("unmarker_t1.5_j1.0", "UnMarker-style ($\\tau{=}1.5$, $j{=}1$)")]
+        ("unmarker_t2.0_j0.5", "Histogram jitter ($\\tau{=}2$, $j{=}0.5$)"),
+        ("unmarker_t1.5_j1.0", "Histogram jitter ($\\tau{=}1.5$, $j{=}1$)")]
 
 
 def _gain_cell(g):
@@ -47,14 +47,14 @@ def robustness_table():
 def ablation_table():
     keys = [("gauss_blur_1.0", "Blur"), ("resize_0.5", "Down.\\ $0.5\\times$"),
             ("contrast_0.5", "Contr.\\ $\\times0.5$"), ("jpeg_q70", "JPEG 70"),
-            ("gauss_noise_.03", "Noise"), ("unmarker_t1.5_j1.0", "UnMarker")]
+            ("gauss_noise_.03", "Noise"), ("unmarker_t1.5_j1.0", "Jitter")]
     lines = [r"\begin{tabular}{l" + "c" * (len(keys) + 1) + "}", r"\toprule",
              "Position & PSNR & " + " & ".join(k[1] for k in keys) + r" \\", r"\midrule"]
     for uv in ("22", "33", "43"):
         recs = json.loads((V2 / f"curves_uv{uv}_p64.json").read_text())["records"]
         cells, psnr = [], None
         for key, _ in keys:
-            g = matched_gain(recs, MAIN_MARGIN, key, n_boot=1000)
+            g = matched_gain(recs, MAIN_MARGIN, key, n_boot=2000)
             psnr = g["dp_psnr"]
             sig = (g["lo"] > 0) or (g["hi"] < 0)
             v = f"{100*g['gain']:+.0f}"
